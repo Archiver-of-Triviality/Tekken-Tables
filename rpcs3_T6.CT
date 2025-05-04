@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CheatTable CheatEngineTableVersion="46">
+  <CheatEntries>
+    <CheatEntry>
+      <ID>7</ID>
+      <Description>"Timers"</Description>
+      <Options moActivateChildrenAsWell="1" moDeactivateChildrenAsWell="1" moAllowManualCollapseAndExpand="1"/>
+      <GroupHeader>1</GroupHeader>
+      <CheatEntries>
+        <CheatEntry>
+          <ID>1</ID>
+          <Description>"Stop Match Timer"</Description>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>[ENABLE]
+
+aobscanregion(infTime,1000000000,FFFFFFFFFF,0F 38 F1 8C 18 FC 00 00 00 48 83 C4 28 E9 68)
+registersymbol(infTime)
+
+infTime:
+  db 90 90 90 90 90 90 90 90 90
+
+
+[DISABLE]
+
+infTime:
+  db 0F 38 F1 8C 18 FC 00 00 00
+
+unregistersymbol(infTime)
+
+{
+// ORIGINAL CODE - INJECTION POINT: 1080CBF276
+
+1080CBF24D: 0F 1F 00                    - nop dword ptr [rax]
+1080CBF250: 48 83 EC 28                 - sub rsp,28
+1080CBF254: 83 7D 14 00                 - cmp dword ptr [rbp+14],00
+1080CBF258: 75 2E                       - jne 1080CBF288
+1080CBF25A: 4C 89 75 18                 - mov [rbp+18],r14
+1080CBF25E: 48 8B 8D 00 01 00 00        - mov rcx,[rbp+00000100]
+1080CBF265: 48 8B 45 30                 - mov rax,[rbp+30]
+1080CBF269: 48 FF C9                    - dec rcx
+1080CBF26C: 48 63 C9                    - movsxd  rcx,ecx
+1080CBF26F: 48 89 8D 00 01 00 00        - mov [rbp+00000100],rcx
+// ---------- INJECTING HERE ----------
+1080CBF276: 0F 38 F1 8C 18 FC 00 00 00  - movbe [rax+rbx+000000FC],ecx
+// ---------- DONE INJECTING  ----------
+1080CBF27F: 48 83 C4 28                 - add rsp,28
+1080CBF283: E9 68 D9 FF FF              - jmp 1080CBCBF0
+1080CBF288: F0 83 4D 14 04              - lock or dword ptr [rbp+14],04
+1080CBF28D: BA 58 A2 1D 00              - mov edx,rpcs3_T6.exe+1CA258
+1080CBF292: 48 89 E9                    - mov rcx,rbp
+1080CBF295: E8 91 F6 05 00              - call 1080D1E92B
+1080CBF29A: 48 83 C4 28                 - add rsp,28
+1080CBF29E: C3                          - ret 
+1080CBF29F: 90                          - nop 
+1080CBF2A0: 48 83 EC 28                 - sub rsp,28
+}
+</AssemblerScript>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>6</ID>
+          <Description>"Stop Character Select Timer"</Description>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>[ENABLE]
+
+aobscanregion(infSelectTimer,1000000000,FFFFFFFFFF,0F 38 F1 4C 18 68 78 09 48 83 C4 28 E9 6A)
+registersymbol(infSelectTimer)
+
+infSelectTimer:
+  db 90 90 90 90 90 90
+
+[DISABLE]
+
+infSelectTimer:
+  db 0F 38 F1 4C 18 68
+
+unregistersymbol(infSelectTimer)
+
+
+{
+// ORIGINAL CODE - INJECTION POINT: 1081D71C25
+
+1081D71BF1: 0F 38 F0 4C 18 68     - movbe ecx,[rax+rbx+68]
+1081D71BF7: 48 FF C9              - dec rcx
+1081D71BFA: 48 63 C9              - movsxd  rcx,ecx
+1081D71BFD: 85 C9                 - test ecx,ecx
+1081D71BFF: 48 89 4D 60           - mov [rbp+60],rcx
+1081D71C03: 0F 98 85 3C 04 00 00  - sets byte ptr [rbp+0000043C]
+1081D71C0A: 0F 9F 85 3D 04 00 00  - setg byte ptr [rbp+0000043D]
+1081D71C11: 0F 94 85 3E 04 00 00  - sete byte ptr [rbp+0000043E]
+1081D71C18: 0F B6 95 78 04 00 00  - movzx edx,byte ptr [rbp+00000478]
+1081D71C1F: 88 95 3F 04 00 00     - mov [rbp+0000043F],dl
+// ---------- INJECTING HERE ----------
+1081D71C25: 0F 38 F1 4C 18 68     - movbe [rax+rbx+68],ecx
+// ---------- DONE INJECTING  ----------
+1081D71C2B: 78 09                 - js 1081D71C36
+1081D71C2D: 48 83 C4 28           - add rsp,28
+1081D71C31: E9 6A DB FF FF        - jmp 1081D6F7A0
+1081D71C36: 48 83 C4 28           - add rsp,28
+1081D71C3A: E9 21 00 00 00        - jmp 1081D71C60
+1081D71C3F: F0 83 4D 14 04        - lock or dword ptr [rbp+14],04
+1081D71C44: BA B8 C0 1F 00        - mov edx,rpcs3_T6.exe+1EC0B8
+1081D71C49: 48 89 E9              - mov rcx,rbp
+1081D71C4C: E8 F6 66 03 00        - call 1081DA8347
+1081D71C51: 48 83 C4 28           - add rsp,28
+}
+</AssemblerScript>
+        </CheatEntry>
+      </CheatEntries>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>20</ID>
+      <Description>"Infinite Health for All"</Description>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>[ENABLE]
+
+aobscanregion(healthChanger,1000000000,FFFFFFFFFF,0F 38 F1 54 18 64 44 0F 38 F1 B4 18 10 03 00 00 44 0F 38 F1 84 18 18 03 00 00 48 83 C4 28 48 85 C9 78 05 E9 B3 F8 FF FF)
+alloc(newmem,$1000)
+
+label(code)
+label(return)
+
+newmem:
+
+code:
+  movbe [rax+rbx+64],edx
+  movbe [rax+rbx+00000310],r14d
+  mov [rax+rbx+64],(int)123838464 //160 in 2byte big endian
+  jmp return
+
+healthChanger:
+  jmp far newmem
+  nop 2
+return:
+registersymbol(healthChanger)
+
+[DISABLE]
+
+healthChanger:
+  db 0F 38 F1 54 18 64 44 0F 38 F1 B4 18 10 03 00 00 44 0F 38 F1 84 18 18 03 00 00 48 83 C4 28 48 85 C9 78 05 E9 B3 F8 FF FF
+
+unregistersymbol(healthChanger)
+dealloc(newmem)
+
+{
+// ORIGINAL CODE - INJECTION POINT: 1080B421B5
+
+1080B4217D: 44 88 8D 3F 04 00 00           - mov [rbp+0000043F],r9b
+1080B42184: 0F 38 F1 94 18 14 03 00 00     - movbe [rax+rbx+00000314],edx
+1080B4218D: 48 8B 55 50                    - mov rdx,[rbp+50]
+1080B42191: 4C 03 B5 E0 00 00 00           - add r14,[rbp+000000E0]
+1080B42198: 4C 29 C2                       - sub rdx,r8
+1080B4219B: 4C 8B 85 E8 00 00 00           - mov r8,[rbp+000000E8]
+1080B421A2: 4C 03 85 F0 00 00 00           - add r8,[rbp+000000F0]
+1080B421A9: 48 89 55 68                    - mov [rbp+68],rdx
+1080B421AD: 4C 89 75 18                    - mov [rbp+18],r14
+1080B421B1: 4C 89 45 60                    - mov [rbp+60],r8
+// ---------- INJECTING HERE ----------
+1080B421B5: 0F 38 F1 54 18 64              - movbe [rax+rbx+64],edx
+// ---------- DONE INJECTING  ----------
+1080B421BB: 44 0F 38 F1 B4 18 10 03 00 00  - movbe [rax+rbx+00000310],r14d
+1080B421C5: 44 0F 38 F1 84 18 18 03 00 00  - movbe [rax+rbx+00000318],r8d
+1080B421CF: 48 83 C4 28                    - add rsp,28
+1080B421D3: 48 85 C9                       - test rcx,rcx
+1080B421D6: 78 05                          - js 1080B421DD
+1080B421D8: E9 B3 F8 FF FF                 - jmp 1080B41A90
+1080B421DD: E9 1E 00 00 00                 - jmp 1080B42200
+1080B421E2: F0 83 4D 14 04                 - lock or dword ptr [rbp+14],04
+1080B421E7: BA C8 EA 1A 00                 - mov edx,rpcs3_T6.exe+19EAC8
+1080B421EC: 48 89 E9                       - mov rcx,rbp
+}
+</AssemblerScript>
+    </CheatEntry>
+  </CheatEntries>
+  <UserdefinedSymbols/>
+</CheatTable>

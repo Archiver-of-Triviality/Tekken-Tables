@@ -1,0 +1,1162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CheatTable CheatEngineTableVersion="46">
+  <CheatEntries>
+    <CheatEntry>
+      <ID>438</ID>
+      <Description>"Disable Hud"</Description>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>[ENABLE]
+
+aobscanmodule(hideHud,Polaris-Win64-Shipping.exe,FF 90 38 02 00 00 44)
+registersymbol(hideHud)
+
+hideHud:
+  db 90 90 90 90 90 90
+
+[DISABLE]
+
+hideHud:
+  db FF 90 38 02 00 00
+
+unregistersymbol(hideHud)
+
+{
+// ORIGINAL CODE - INJECTION POINT: Polaris-Win64-Shipping.exe+2F3DBE0
+
+Polaris-Win64-Shipping.exe+2F3DBB2: 4C 8B C6              - mov r8,rsi
+Polaris-Win64-Shipping.exe+2F3DBB5: 88 4C 24 38           - mov [rsp+38],cl
+Polaris-Win64-Shipping.exe+2F3DBB9: 48 8D 8D A8 00 00 00  - lea rcx,[rbp+000000A8]
+Polaris-Win64-Shipping.exe+2F3DBC0: 48 89 4C 24 30        - mov [rsp+30],rcx
+Polaris-Win64-Shipping.exe+2F3DBC5: 48 8B CB              - mov rcx,rbx
+Polaris-Win64-Shipping.exe+2F3DBC8: 88 05 13 EF EC 05     - mov [Polaris-Win64-Shipping.exe+8E0CAE1],al
+Polaris-Win64-Shipping.exe+2F3DBCE: 48 8B 03              - mov rax,[rbx]
+Polaris-Win64-Shipping.exe+2F3DBD1: 44 89 74 24 28        - mov [rsp+28],r14d
+Polaris-Win64-Shipping.exe+2F3DBD6: 4C 89 7C 24 20        - mov [rsp+20],r15
+Polaris-Win64-Shipping.exe+2F3DBDB: 40 88 7C 24 51        - mov [rsp+51],dil
+// ---------- INJECTING HERE ----------
+Polaris-Win64-Shipping.exe+2F3DBE0: FF 90 38 02 00 00     - call qword ptr [rax+00000238]
+// ---------- DONE INJECTING  ----------
+Polaris-Win64-Shipping.exe+2F3DBE6: 44 0F B6 43 37        - movzx r8d,byte ptr [rbx+37]
+Polaris-Win64-Shipping.exe+2F3DBEB: 48 8D 4B 18           - lea rcx,[rbx+18]
+Polaris-Win64-Shipping.exe+2F3DBEF: 45 0F B6 C8           - movzx r9d,r8l
+Polaris-Win64-Shipping.exe+2F3DBF3: 48 8B D3              - mov rdx,rbx
+Polaris-Win64-Shipping.exe+2F3DBF6: 41 80 E1 EF           - and r9l,-11
+Polaris-Win64-Shipping.exe+2F3DBFA: 44 8B F0              - mov r14d,eax
+Polaris-Win64-Shipping.exe+2F3DBFD: 44 88 4B 37           - mov [rbx+37],r9l
+Polaris-Win64-Shipping.exe+2F3DC01: E8 FA 03 F8 FF        - call Polaris-Win64-Shipping.exe+2EBE000
+Polaris-Win64-Shipping.exe+2F3DC06: 80 7C 24 50 00        - cmp byte ptr [rsp+50],00
+Polaris-Win64-Shipping.exe+2F3DC0B: 74 08                 - je Polaris-Win64-Shipping.exe+2F3DC15
+}
+</AssemblerScript>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>351</ID>
+      <Description>"Disable FOV Changes"</Description>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>[ENABLE]
+
+aobscanmodule(disableFOVchanges,Polaris-Win64-Shipping.exe,F3 0F 11 89 B4 02 00 00 C3)
+registersymbol(disableFOVchanges)
+
+disableFOVchanges:
+  db 90 90 90 90 90 90 90 90
+
+
+[DISABLE]
+
+disableFOVchanges:
+  db F3 0F 11 89 B4 02 00 00
+
+unregistersymbol(disableFOVchanges)
+
+
+{
+// ORIGINAL CODE - INJECTION POINT: Polaris-Win64-Shipping.exe+4DCEBD0
+
+Polaris-Win64-Shipping.exe+4DCEBAE: 66 0F 5A C0              - cvtpd2ps xmm0,xmm0
+Polaris-Win64-Shipping.exe+4DCEBB2: F3 0F 11 B3 20 03 00 00  - movss [rbx+00000320],xmm6
+Polaris-Win64-Shipping.exe+4DCEBBA: F3 0F 11 83 24 03 00 00  - movss [rbx+00000324],xmm0
+Polaris-Win64-Shipping.exe+4DCEBC2: 0F 28 74 24 20           - movaps xmm6,[rsp+20]
+Polaris-Win64-Shipping.exe+4DCEBC7: 48 83 C4 30              - add rsp,30
+Polaris-Win64-Shipping.exe+4DCEBCB: 5B                       - pop rbx
+Polaris-Win64-Shipping.exe+4DCEBCC: C3                       - ret 
+Polaris-Win64-Shipping.exe+4DCEBCD: CC                       - int 3 
+Polaris-Win64-Shipping.exe+4DCEBCE: CC                       - int 3 
+Polaris-Win64-Shipping.exe+4DCEBCF: CC                       - int 3 
+// ---------- INJECTING HERE ----------
+Polaris-Win64-Shipping.exe+4DCEBD0: F3 0F 11 89 B4 02 00 00  - movss [rcx+000002B4],xmm1
+// ---------- DONE INJECTING  ----------
+Polaris-Win64-Shipping.exe+4DCEBD8: C3                       - ret 
+Polaris-Win64-Shipping.exe+4DCEBD9: CC                       - int 3 
+Polaris-Win64-Shipping.exe+4DCEBDA: CC                       - int 3 
+Polaris-Win64-Shipping.exe+4DCEBDB: CC                       - int 3 
+Polaris-Win64-Shipping.exe+4DCEBDC: CC                       - int 3 
+Polaris-Win64-Shipping.exe+4DCEBDD: CC                       - int 3 
+Polaris-Win64-Shipping.exe+4DCEBDE: CC                       - int 3 
+Polaris-Win64-Shipping.exe+4DCEBDF: CC                       - int 3 
+Polaris-Win64-Shipping.exe+4DCEBE0: 48 89 5C 24 08           - mov [rsp+08],rbx
+Polaris-Win64-Shipping.exe+4DCEBE5: 48 89 6C 24 18           - mov [rsp+18],rbp
+}
+</AssemblerScript>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>383</ID>
+      <Description>"Change Game Speed"</Description>
+      <Options moHideChildren="1"/>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>[ENABLE]
+
+aobscanmodule(changeSlowMoSpeed,Polaris-Win64-Shipping.exe,CC CC CC CC CC 89 51 08 C3 CC)
+alloc(newmem,$1000,changeSlowMoSpeed)
+
+label(code)
+label(return)
+
+label(speedVar)
+registersymbol(speedVar)
+
+newmem:
+
+  mov edx,[speedVar]
+
+code:
+  mov [rcx+08],edx
+
+  ret 
+  int 3
+  jmp return
+
+speedVar:
+dd 64
+
+changeSlowMoSpeed+05:
+  jmp newmem
+return:
+registersymbol(changeSlowMoSpeed)
+
+[DISABLE]
+
+changeSlowMoSpeed+05:
+  db 89 51 08 C3 CC
+
+unregistersymbol(changeSlowMoSpeed)
+dealloc(newmem)
+unregistersymbol(speedVar)
+
+{
+// ORIGINAL CODE - INJECTION POINT: Polaris-Win64-Shipping.AK::WriteBytesCount::SetCount
+
+Polaris-Win64-Shipping.AK::WriteBytesBuffer::GetPos+5E36: CC        - int 3 
+Polaris-Win64-Shipping.AK::WriteBytesBuffer::GetPos+5E37: CC        - int 3 
+Polaris-Win64-Shipping.AK::WriteBytesBuffer::GetPos+5E38: CC        - int 3 
+Polaris-Win64-Shipping.AK::WriteBytesBuffer::GetPos+5E39: CC        - int 3 
+Polaris-Win64-Shipping.AK::WriteBytesBuffer::GetPos+5E3A: CC        - int 3 
+Polaris-Win64-Shipping.AK::WriteBytesBuffer::GetPos+5E3B: CC        - int 3 
+Polaris-Win64-Shipping.AK::WriteBytesBuffer::GetPos+5E3C: CC        - int 3 
+Polaris-Win64-Shipping.AK::WriteBytesBuffer::GetPos+5E3D: CC        - int 3 
+Polaris-Win64-Shipping.AK::WriteBytesBuffer::GetPos+5E3E: CC        - int 3 
+Polaris-Win64-Shipping.AK::WriteBytesBuffer::GetPos+5E3F: CC        - int 3 
+// ---------- INJECTING HERE ----------
+Polaris-Win64-Shipping.AK::WriteBytesCount::SetCount: 89 51 08  - mov [rcx+08],edx
+// ---------- DONE INJECTING  ----------
+Polaris-Win64-Shipping.AK::WriteBytesCount::SetCount+3: C3        - ret 
+Polaris-Win64-Shipping.AK::WriteBytesCount::SetCount+4: CC        - int 3 
+Polaris-Win64-Shipping.AK::WriteBytesCount::SetCount+5: CC        - int 3 
+Polaris-Win64-Shipping.AK::WriteBytesCount::SetCount+6: CC        - int 3 
+Polaris-Win64-Shipping.AK::WriteBytesCount::SetCount+7: CC        - int 3 
+Polaris-Win64-Shipping.AK::WriteBytesCount::SetCount+8: CC        - int 3 
+Polaris-Win64-Shipping.AK::WriteBytesCount::SetCount+9: CC        - int 3 
+Polaris-Win64-Shipping.AK::WriteBytesCount::SetCount+A: CC        - int 3 
+Polaris-Win64-Shipping.AK::WriteBytesCount::SetCount+B: CC        - int 3 
+Polaris-Win64-Shipping.AK::WriteBytesCount::SetCount+C: CC        - int 3 
+}
+</AssemblerScript>
+      <CheatEntries>
+        <CheatEntry>
+          <ID>384</ID>
+          <Description>"Game Speed"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>4 Bytes</VariableType>
+          <Address>speedVar</Address>
+        </CheatEntry>
+      </CheatEntries>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>1337027868</ID>
+      <Description>"Remove Photo Mode Frame Advance Limit"</Description>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>[ENABLE]
+
+aobscanmodule(disableFrameSkipLimit,Polaris-Win64-Shipping.exe,39 86 00 02 00 00 7F)
+registersymbol(disableFrameSkipLimit)
+
+disableFrameSkipLimit:
+  db 90 90 90 90 90 90
+
+[DISABLE]
+
+disableFrameSkipLimit:
+  db 39 86 00 02 00 00
+
+unregistersymbol(disableFrameSkipLimit)
+
+{
+// ORIGINAL CODE - INJECTION POINT: Polaris-Win64-Shipping.exe+585D78F
+
+Polaris-Win64-Shipping.exe+585D755: 0F 84 09 01 00 00        - je Polaris-Win64-Shipping.exe+585D864
+Polaris-Win64-Shipping.exe+585D75B: E8 C0 B6 06 FC           - call Polaris-Win64-Shipping.exe+18C8E20
+Polaris-Win64-Shipping.exe+585D760: 48 8D 15 39 D8 BF 03     - lea rdx,[Polaris-Win64-Shipping.exe+945AFA0]
+Polaris-Win64-Shipping.exe+585D767: 48 8B C8                 - mov rcx,rax
+Polaris-Win64-Shipping.exe+585D76A: E8 61 B5 06 FC           - call Polaris-Win64-Shipping.exe+18C8CD0
+Polaris-Win64-Shipping.exe+585D76F: 80 B8 04 03 00 00 00     - cmp byte ptr [rax+00000304],00
+Polaris-Win64-Shipping.exe+585D776: 0F 85 C8 00 00 00        - jne Polaris-Win64-Shipping.exe+585D844
+Polaris-Win64-Shipping.exe+585D77C: 80 BE EC 01 00 00 00     - cmp byte ptr [rsi+000001EC],00
+Polaris-Win64-Shipping.exe+585D783: 0F 84 BB 00 00 00        - je Polaris-Win64-Shipping.exe+585D844
+Polaris-Win64-Shipping.exe+585D789: 8B 86 FC 01 00 00        - mov eax,[rsi+000001FC]
+// ---------- INJECTING HERE ----------
+Polaris-Win64-Shipping.exe+585D78F: 39 86 00 02 00 00        - cmp [rsi+00000200],eax
+// ---------- DONE INJECTING  ----------
+Polaris-Win64-Shipping.exe+585D795: 7F 0C                    - jg Polaris-Win64-Shipping.exe+585D7A3
+Polaris-Win64-Shipping.exe+585D797: 48 8D 15 1A 61 C0 02     - lea rdx,[Polaris-Win64-Shipping.exe+84638B8]
+Polaris-Win64-Shipping.exe+585D79E: E9 A8 00 00 00           - jmp Polaris-Win64-Shipping.exe+585D84B
+Polaris-Win64-Shipping.exe+585D7A3: E8 78 B6 06 FC           - call Polaris-Win64-Shipping.exe+18C8E20
+Polaris-Win64-Shipping.exe+585D7A8: 48 8D 15 E9 D7 BF 03     - lea rdx,[Polaris-Win64-Shipping.exe+945AF98]
+Polaris-Win64-Shipping.exe+585D7AF: 48 8B C8                 - mov rcx,rax
+Polaris-Win64-Shipping.exe+585D7B2: E8 19 B5 06 FC           - call Polaris-Win64-Shipping.exe+18C8CD0
+Polaris-Win64-Shipping.exe+585D7B7: 48 8D 8C 24 80 00 00 00  - lea rcx,[rsp+00000080]
+Polaris-Win64-Shipping.exe+585D7BF: 48 8B D8                 - mov rbx,rax
+Polaris-Win64-Shipping.exe+585D7C2: E8 59 25 F7 FB           - call Polaris-Win64-Shipping.exe+17CFD20
+}
+</AssemblerScript>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>1337027919</ID>
+      <Description>"Hitbox Scaler"</Description>
+      <Options moHideChildren="1" moActivateChildrenAsWell="1"/>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>[ENABLE]
+
+aobscanmodule(hitboxScaler,Polaris-Win64-Shipping.exe,C7 86 9C 09 00 00 00 00 80 3F) // should be unique
+alloc(newmem,$1000,hitboxScaler)
+
+label(code)
+label(return)
+
+label(hitbox)
+registersymbol(hitbox)
+
+newmem:
+
+code:
+  movss xmm1,[hitbox]
+  movss [rsi+0000099C],xmm1
+  //mov [rsi+0000099C],3F800000
+  jmp return
+
+hitbox:
+dd (float)1.0
+
+hitboxScaler:
+  jmp newmem
+  nop 5
+return:
+registersymbol(hitboxScaler)
+
+[DISABLE]
+
+hitboxScaler:
+  db C7 86 9C 09 00 00 00 00 80 3F
+
+unregistersymbol(hitboxScaler)
+dealloc(newmem)
+unregistersymbol(hitbox)
+
+{
+// ORIGINAL CODE - INJECTION POINT: Polaris-Win64-Shipping.AK::WriteBytesCount::Clear+E854
+
+Polaris-Win64-Shipping.AK::WriteBytesCount::Clear+E81D: C7 86 90 09 00 00 64 00 00 00  - mov [rsi+00000990],00000064
+Polaris-Win64-Shipping.AK::WriteBytesCount::Clear+E827: 44 38 B6 94 09 00 00           - cmp [rsi+00000994],r14b
+Polaris-Win64-Shipping.AK::WriteBytesCount::Clear+E82E: 74 12                          - je Polaris-Win64-Shipping.AK::WriteBytesCount::Clear+E842
+Polaris-Win64-Shipping.AK::WriteBytesCount::Clear+E830: 48 8B CE                       - mov rcx,rsi
+Polaris-Win64-Shipping.AK::WriteBytesCount::Clear+E833: E8 28 7F 01 00                 - call "Polaris-Win64-Shipping.exe"+18F9A50
+Polaris-Win64-Shipping.AK::WriteBytesCount::Clear+E838: 48 8B C8                       - mov rcx,rax
+Polaris-Win64-Shipping.AK::WriteBytesCount::Clear+E83B: 33 D2                          - xor edx,edx
+Polaris-Win64-Shipping.AK::WriteBytesCount::Clear+E83D: E8 AE 73 17 FF                 - call Polaris-Win64-Shipping.AK::MemoryMgr::StartProfileThreadUsage
+Polaris-Win64-Shipping.AK::WriteBytesCount::Clear+E842: 66 44 89 B6 94 09 00 00        - mov [rsi+00000994],r14w
+Polaris-Win64-Shipping.AK::WriteBytesCount::Clear+E84A: C7 86 98 09 00 00 00 00 80 3F  - mov [rsi+00000998],3F800000
+// ---------- INJECTING HERE ----------
+Polaris-Win64-Shipping.AK::WriteBytesCount::Clear+E854: C7 86 9C 09 00 00 00 00 80 3F  - mov [rsi+0000099C],3F800000
+// ---------- DONE INJECTING  ----------
+Polaris-Win64-Shipping.AK::WriteBytesCount::Clear+E85E: 66 44 89 B6 A0 09 00 00        - mov [rsi+000009A0],r14w
+Polaris-Win64-Shipping.AK::WriteBytesCount::Clear+E866: 4C 89 B6 A4 09 00 00           - mov [rsi+000009A4],r14
+Polaris-Win64-Shipping.AK::WriteBytesCount::Clear+E86D: 4C 89 B6 AC 09 00 00           - mov [rsi+000009AC],r14
+Polaris-Win64-Shipping.AK::WriteBytesCount::Clear+E874: 44 88 B6 B8 09 00 00           - mov [rsi+000009B8],r14b
+Polaris-Win64-Shipping.AK::WriteBytesCount::Clear+E87B: 4C 89 B6 BC 09 00 00           - mov [rsi+000009BC],r14
+Polaris-Win64-Shipping.AK::WriteBytesCount::Clear+E882: 4C 89 B6 C4 09 00 00           - mov [rsi+000009C4],r14
+Polaris-Win64-Shipping.AK::WriteBytesCount::Clear+E889: 44 89 B6 CC 09 00 00           - mov [rsi+000009CC],r14d
+Polaris-Win64-Shipping.AK::WriteBytesCount::Clear+E890: 44 88 B6 D4 09 00 00           - mov [rsi+000009D4],r14b
+Polaris-Win64-Shipping.AK::WriteBytesCount::Clear+E897: 44 88 B6 38 19 00 00           - mov [rsi+00001938],r14b
+Polaris-Win64-Shipping.AK::WriteBytesCount::Clear+E89E: 83 BE D8 09 00 00 01           - cmp dword ptr [rsi+000009D8],01
+}
+</AssemblerScript>
+      <CheatEntries>
+        <CheatEntry>
+          <ID>1337027918</ID>
+          <Description>"Scale"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Float</VariableType>
+          <Address>hitbox</Address>
+        </CheatEntry>
+      </CheatEntries>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>1337027869</ID>
+      <Description>"Info"</Description>
+      <Options moAlwaysHideChildren="1" moActivateChildrenAsWell="1" moDeactivateChildrenAsWell="1"/>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>[ENABLE]
+// 80 BB 46 09 00 00 00 old
+// 80 BB 66 09 00 00 00 old
+// 80 BB C0 09 00 00 00 new
+// 80 BB D8 09 00 00 00 74 09 C7 47 2C 06 00 00 00
+// 80 BB F8 09 00 00 00 74 09 C7 47 2C 06 00 00 00
+
+///////// Animation info and frame data
+
+aobscanmodule(pcFinder,Polaris-Win64-Shipping.exe,80 BB F8 09 00 00 00) // should be unique
+alloc(newmem,$1000,pcFinder)
+
+label(code)
+label(return)
+
+label(pcFinderPTR)
+registersymbol(pcFinderPTR)
+
+
+newmem:
+  cmp [rbx+00000004],(int)0
+  jne code
+  mov [pcFinderPTR],rbx // 92D offset = Power Crush Value
+
+code:
+  cmp byte ptr [rbx+000009F8],00
+  jmp return
+
+
+pcFinderPTR:
+dd 0
+
+
+pcFinder:
+  jmp newmem
+  nop 2
+return:
+registersymbol(pcFinder)
+
+[DISABLE]
+
+pcFinder:
+  db 80 BB F8 09 00 00 00
+
+unregistersymbol(pcFinder)
+dealloc(newmem)
+unregistersymbol(pcFinderPTR)
+
+
+{
+// old ORIGINAL CODE - INJECTION POINT: Polaris-Win64-Shipping.exe+1949585
+
+Polaris-Win64-Shipping.exe+1949565: 7E 0E                 - jle Polaris-Win64-Shipping.exe+1949575
+Polaris-Win64-Shipping.exe+1949567: 3B CA                 - cmp ecx,edx
+Polaris-Win64-Shipping.exe+1949569: 0F 4F CA              - cmovg ecx,edx
+Polaris-Win64-Shipping.exe+194956C: EB 09                 - jmp Polaris-Win64-Shipping.exe+1949577
+Polaris-Win64-Shipping.exe+194956E: C7 47 20 00 00 00 00  - mov [rdi+20],00000000
+Polaris-Win64-Shipping.exe+1949575: 33 C9                 - xor ecx,ecx
+Polaris-Win64-Shipping.exe+1949577: 89 4F 24              - mov [rdi+24],ecx
+Polaris-Win64-Shipping.exe+194957A: 48 8B CB              - mov rcx,rbx
+Polaris-Win64-Shipping.exe+194957D: E8 2E 5D F4 FF        - call Polaris-Win64-Shipping.exe+188F2B0
+Polaris-Win64-Shipping.exe+1949582: 88 47 28              - mov [rdi+28],al
+// ---------- INJECTING HERE ----------
+Polaris-Win64-Shipping.exe+1949585: 80 BB 46 09 00 00 00  - cmp byte ptr [rbx+00000946],00
+// ---------- DONE INJECTING  ----------
+Polaris-Win64-Shipping.exe+194958C: 74 09                 - je Polaris-Win64-Shipping.exe+1949597
+Polaris-Win64-Shipping.exe+194958E: C7 47 2C 06 00 00 00  - mov [rdi+2C],00000006
+Polaris-Win64-Shipping.exe+1949595: EB 6A                 - jmp Polaris-Win64-Shipping.exe+1949601
+Polaris-Win64-Shipping.exe+1949597: 83 7F 20 00           - cmp dword ptr [rdi+20],00
+Polaris-Win64-Shipping.exe+194959B: 75 5D                 - jne Polaris-Win64-Shipping.exe+19495FA
+Polaris-Win64-Shipping.exe+194959D: 83 7F 24 00           - cmp dword ptr [rdi+24],00
+Polaris-Win64-Shipping.exe+19495A1: 75 57                 - jne Polaris-Win64-Shipping.exe+19495FA
+Polaris-Win64-Shipping.exe+19495A3: 8B 83 10 06 00 00     - mov eax,[rbx+00000610]
+Polaris-Win64-Shipping.exe+19495A9: FF C8                 - dec eax
+Polaris-Win64-Shipping.exe+19495AB: 83 F8 1E              - cmp eax,1E
+}
+</AssemblerScript>
+      <CheatEntries>
+        <CheatEntry>
+          <ID>1337027871</ID>
+          <Description>"Display Move Data"</Description>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{$lua}
+[ENABLE]
+if syntaxcheck then return end
+
+-- Create the form
+TextOverlayForm = createForm(false)
+local f = TextOverlayForm
+f.BorderStyle = 'bsNone' -- No border for the form
+f.Color = 0x0000FF -- Black background
+f.setLayeredAttributes(0xFF, 255, 3)
+f.FormStyle = 'fsSystemStayOnTop' -- Keep the form on top
+f.Left = 60
+f.Top = 270
+f.Width = 400 -- Increased width to accommodate longer text
+f.Height = 500 -- Height remains unchanged
+f.Caption = "" -- Remove caption
+
+-- Make the form draggable
+f.OnMouseDown = function()
+  f.dragNow()
+end
+
+-- Function to create and position a label
+local function createTextLabel(parent, top, caption, fontSize)
+  local label = createLabel(parent)
+  label.font.size = fontSize or 40 -- Font size for text
+  label.font.color = 0xFFFFFF -- White text
+  label.Font.Quality = 'fqNonAntialiased'
+  label.AutoSize = false
+  label.Caption = caption
+  label.Alignment = 'taLeftJustify'
+  label.Layout = 'llTop' -- Align text to the top
+  label.Left = 10
+  label.Width = parent.Width - 20 -- Adjusted to fit within the new width
+  label.Top = top
+  label.Height = 60 -- Height of the label
+  return label
+end
+
+-- Function to create and position an outline label
+local function createOutlineLabel(parent, top, caption, fontSize)
+  local label = createLabel(parent)
+  label.font.size = fontSize or 40 -- Font size for text
+  label.font.color = 0x000000 -- Black color for the outline
+  label.Font.Quality = 'fqNonAntialiased'
+  label.AutoSize = false
+  label.Caption = caption
+  label.Alignment = 'taLeftJustify'
+  label.Layout = 'llTop' -- Align text to the top
+  label.Left = 8 -- Slightly offset for outline effect
+  label.Top = top + 2 -- Slightly offset for outline effect
+  label.Width = parent.Width - 20 -- Adjusted to fit within the new width
+  label.Height = 60 -- Height of the label
+  return label
+end
+
+-- Create and position outline labels and text labels
+local topValueOutlineLabel = createOutlineLabel(f, 10, "", 40)
+local topValueLabel = createTextLabel(f, 10, "", 40)
+
+local recvOutlineLabel = createOutlineLabel(f, 70, "recv: ", 40)
+local recvLabel = createTextLabel(f, 70, "recv: ", 40)
+
+local totalRecoveryOutlineLabel = createOutlineLabel(f, 130, "tot: ", 40)
+local totalRecoveryLabel = createTextLabel(f, 130, "tot: ", 40)
+
+local delayOutlineLabel = createOutlineLabel(f, 190, "delay: ", 40)
+local delayLabel = createTextLabel(f, 190, "delay: ", 40)
+
+local jsOutlineLabel = createOutlineLabel(f, 250, "js: ", 40)
+local jsLabel = createTextLabel(f, 250, "js: ", 40)
+
+-- New cs label
+local csOutlineLabel = createOutlineLabel(f, 310, "cs: 0~", 40)
+local csLabel = createTextLabel(f, 310, "cs: 0~", 40)
+
+-- New pc label
+local pcOutlineLabel = createOutlineLabel(f, 370, "pc: 0~", 40)
+local pcLabel = createTextLabel(f, 370, "pc: 0~", 40)
+
+local dmgOutlineLabel = createOutlineLabel(f, 430, "dmg: ", 40)
+local dmgLabel = createTextLabel(f, 430, "dmg: ", 40)
+
+-- Adjust height of labels slightly
+delayLabel.Height = 70
+delayOutlineLabel.Height = 70
+jsLabel.Height = 70
+jsOutlineLabel.Height = 70
+csLabel.Height = 70
+csOutlineLabel.Height = 70
+pcLabel.Height = 70
+pcOutlineLabel.Height = 70
+
+-- Variables to track cs state and frames
+local wasCrouching = false
+local crouchingFrameStart = 0
+local lastCrouchingFrame = 0
+local csDisplayDelay = 3000 -- 3 seconds delay before resetting cs values
+
+-- Variables to track pc state and frames
+local wasPC = false
+local pcFrameStart = 0
+local lastPCFrame = 0
+local prevTotalRecovery = 0
+
+-- Timer to update the text labels
+local t = createTimer(f)
+t.Interval = 1 -- Update every 1 millisecond
+t.OnTimer = function()
+  -- Read the values from memory with error handling
+  local topValue = readInteger('[pcFinderPTR]+390') or 0 -- Value to display at the top (Anim Timer)
+  local valuePCFinder = readInteger('[pcFinderPTR]+5D4') or 0 -- Total Recovery Frames
+  local valueLAF = readInteger('[[pcFinderPTR]+3E0]+15C') or 0 -- Last Active Frame (LAF)
+  local valueJS = readInteger('[[pcFinderPTR]+3E0]+124') or 0 -- js start
+  local jsEnd = readInteger('[[pcFinderPTR]+3E0]+128') or 0 -- js end
+  local delay = readInteger('[pcFinderPTR]+23F8') or 0 -- Delay Value
+  local cs = readInteger('csPTR') or 0 -- Read the cs status
+  local pc = readBytes('[pcFinderPTR]+9F8', 1, false) or 0 -- Read the pc status as a byte
+  local dmg = readInteger('[pcFinderPTR]+504') or 0
+
+  -- Read the transition value from memory
+  local transition = readInteger('[[pcFinderPTR]+3E0]+5C+70') or 0 -- Transition address
+
+  -- Calculate the Recovery value (recv) by subtracting LAF from Total Recovery Frames
+  local result = valuePCFinder - valueLAF
+
+  -- Convert the result to signed 32-bit integer if necessary
+  local signedResult = result
+  if result &gt;= 0x80000000 then
+    signedResult = result - 0x100000000
+  end
+
+  -- Update the labels with the values
+  topValueLabel.Caption = "" .. topValue
+  topValueOutlineLabel.Caption = topValueLabel.Caption
+
+  -- Check if transition value is 32770 to append "FC"
+  if transition == 32770 then
+    recvLabel.Caption = "recv: " .. math.abs(signedResult) .. " FC"
+  else
+    recvLabel.Caption = "recv: " .. math.abs(signedResult)
+  end
+  recvOutlineLabel.Caption = recvLabel.Caption
+
+  totalRecoveryLabel.Caption = "tot: " .. valuePCFinder
+  totalRecoveryOutlineLabel.Caption = totalRecoveryLabel.Caption
+
+  -- Update the jsLabel to display the format "js start~js end"
+  jsLabel.Caption = "js: " .. valueJS .. "~" .. jsEnd
+  jsOutlineLabel.Caption = jsLabel.Caption
+
+  -- Update the delay label to show "delay: currentDelayValue-totalRecoveryValue + delayValue"
+  local combinedValue = valuePCFinder + delay
+  delayLabel.Caption = "delay: " .. delay .. "-" .. combinedValue
+  delayOutlineLabel.Caption = delayLabel.Caption
+
+  dmgLabel.Caption = "dmg: " .. dmg
+  dmgOutlineLabel.Caption = dmgLabel.Caption
+
+  -- Detect when cs occurs and capture the start frame
+  if cs == 1 then
+    if not wasCrouching then
+      crouchingFrameStart = topValue -- Capture the anim timer value when cs starts
+      wasCrouching = true
+    end
+    lastCrouchingFrame = topValue -- Continuously update to capture the last frame where cs is 1
+  elseif wasCrouching then
+    wasCrouching = false
+    -- Start a timer to reset the cs value after a delay
+    createTimer(f).OnTimer = function(tmr)
+      csLabel.Caption = "cs: 0~0"
+      csOutlineLabel.Caption = csLabel.Caption
+      tmr.destroy() -- Destroy the timer after use
+    end
+    createTimer(f).Interval = csDisplayDelay -- Set delay for cs to stay on screen
+  end
+
+  -- Display cs frame number as "start~last frame where cs was 1"
+  if lastCrouchingFrame &gt; 0 then
+    csLabel.Caption = "cs: " .. crouchingFrameStart .. "~" .. lastCrouchingFrame
+  else
+    csLabel.Caption = "cs: 0~0"
+  end
+  csOutlineLabel.Caption = csLabel.Caption
+
+  -- Check if the total recovery value has changed
+  if valuePCFinder ~= prevTotalRecovery then
+    -- If changed, reset pc values
+    pcFrameStart = 0
+    lastPCFrame = 0
+  end
+
+  -- Detect when pc occurs and capture the start frame
+  if pc == 1 then
+    if not wasPC then
+      pcFrameStart = topValue -- Capture the anim timer value when pc starts
+      wasPC = true
+    end
+    lastPCFrame = topValue -- Continuously update to capture the last frame where pc is 1
+  elseif wasPC then
+    wasPC = false
+    -- Start a timer to reset the pc value after a delay
+    createTimer(f).OnTimer = function(tmr)
+      pcLabel.Caption = "pc: 0~0"
+      pcOutlineLabel.Caption = pcLabel.Caption
+      tmr.destroy() -- Destroy the timer after use
+    end
+    createTimer(f).Interval = csDisplayDelay -- Set delay for pc to stay on screen
+  end
+
+  -- Display pc frame number as "start~last frame where pc was 1"
+  if lastPCFrame &gt; 0 then
+    pcLabel.Caption = "pc: " .. pcFrameStart .. "~" .. lastPCFrame
+  else
+    pcLabel.Caption = "pc: 0~0"
+  end
+  pcOutlineLabel.Caption = pcLabel.Caption
+
+  -- Store the current total recovery value for comparison in the next iteration
+  prevTotalRecovery = valuePCFinder
+end
+
+-- Start the form
+f.show()
+
+[DISABLE]
+if syntaxcheck then return end
+-- Clean up when the script is disabled
+if TextOverlayForm then
+  TextOverlayForm.destroy()
+  TextOverlayForm = nil
+end
+
+if t then
+  t.destroy()
+  t = nil
+end
+</AssemblerScript>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>1337027870</ID>
+          <Description>"Crouch Status Finder"</Description>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>[ENABLE]
+
+// 88 87 14 08 00 00
+// 88 86 14 08 00 00
+
+aobscanmodule(csFinder,Polaris-Win64-Shipping.exe,88 86 14 08 00 00)
+alloc(newmem,$1000,csFinder)
+
+label(code)
+label(return)
+
+label(csPTR)
+registersymbol(csPTR)
+
+newmem:
+  //cmp [rdi+000007AC],(int)0
+  cmp [rsi+000007AC],(int)0
+  jg code
+  mov [csPTR],al
+
+code:
+  mov [rsi+00000814],al //RDI is older
+  jmp return
+
+csPTR:
+dd 0
+
+csFinder:
+  jmp newmem
+  nop
+return:
+registersymbol(csFinder)
+
+[DISABLE]
+
+csFinder:
+  db 88 86 14 08 00 00
+
+unregistersymbol(csFinder)
+dealloc(newmem)
+unregistersymbol(csPTR)
+{
+// ORIGINAL CODE - INJECTION POINT: Polaris-Win64-Shipping.exe+29D1DE5
+
+Polaris-Win64-Shipping.exe+29D1DC8: 48 8B 9C 24 F8 00 00 00  - mov rbx,[rsp+000000F8]
+Polaris-Win64-Shipping.exe+29D1DD0: 83 E9 05                 - sub ecx,05
+Polaris-Win64-Shipping.exe+29D1DD3: 74 0E                    - je Polaris-Win64-Shipping.exe+29D1DE3
+Polaris-Win64-Shipping.exe+29D1DD5: 83 E9 01                 - sub ecx,01
+Polaris-Win64-Shipping.exe+29D1DD8: 74 09                    - je Polaris-Win64-Shipping.exe+29D1DE3
+Polaris-Win64-Shipping.exe+29D1DDA: 83 F9 01                 - cmp ecx,01
+Polaris-Win64-Shipping.exe+29D1DDD: 74 04                    - je Polaris-Win64-Shipping.exe+29D1DE3
+Polaris-Win64-Shipping.exe+29D1DDF: 32 C0                    - xor al,al
+Polaris-Win64-Shipping.exe+29D1DE1: EB 02                    - jmp Polaris-Win64-Shipping.exe+29D1DE5
+Polaris-Win64-Shipping.exe+29D1DE3: B0 01                    - mov al,01
+// ---------- INJECTING HERE ----------
+Polaris-Win64-Shipping.exe+29D1DE5: 88 87 14 08 00 00        - mov [rdi+00000814],al
+// ---------- DONE INJECTING  ----------
+Polaris-Win64-Shipping.exe+29D1DEB: 83 BE 84 11 00 00 00     - cmp dword ptr [rsi+00001184],00
+Polaris-Win64-Shipping.exe+29D1DF2: 7F 12                    - jg Polaris-Win64-Shipping.exe+29D1E06
+Polaris-Win64-Shipping.exe+29D1DF4: 83 BE 8C 11 00 00 00     - cmp dword ptr [rsi+0000118C],00
+Polaris-Win64-Shipping.exe+29D1DFB: 75 09                    - jne Polaris-Win64-Shipping.exe+29D1E06
+Polaris-Win64-Shipping.exe+29D1DFD: C6 87 15 08 00 00 00     - mov byte ptr [rdi+00000815],00
+Polaris-Win64-Shipping.exe+29D1E04: EB 07                    - jmp Polaris-Win64-Shipping.exe+29D1E0D
+Polaris-Win64-Shipping.exe+29D1E06: C6 87 15 08 00 00 01     - mov byte ptr [rdi+00000815],01
+Polaris-Win64-Shipping.exe+29D1E0D: 48 8B B4 24 00 01 00 00  - mov rsi,[rsp+00000100]
+Polaris-Win64-Shipping.exe+29D1E15: 48 8B 4D 17              - mov rcx,[rbp+17]
+Polaris-Win64-Shipping.exe+29D1E19: 48 33 CC                 - xor rcx,rsp
+}
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>1337027872</ID>
+              <Description>"Animation +A8"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>4 Bytes</VariableType>
+              <Address>pcFinderPTR</Address>
+              <Offsets>
+                <Offset>3E0</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>1337027873</ID>
+              <Description>"Anim Length"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>4 Bytes</VariableType>
+              <Address>pcFinderPTR</Address>
+              <Offsets>
+                <Offset>120</Offset>
+                <Offset>3E0</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>1337027874</ID>
+              <Description>"Anim Timer"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>4 Bytes</VariableType>
+              <Address>pcFinderPTR</Address>
+              <Offsets>
+                <Offset>390</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>1337027875</ID>
+              <Description>"Crouch Status"</Description>
+              <DropDownList DisplayValueAsItem="1">0:Standing
+1:Crouching
+</DropDownList>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>4 Bytes</VariableType>
+              <Address>csPTR</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>1337027876</ID>
+              <Description>"Damage"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>4 Bytes</VariableType>
+              <Address>pcFinderPTR</Address>
+              <Offsets>
+                <Offset>8</Offset>
+                <Offset>68+A8</Offset>
+                <Offset>3E0</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>1337027877</ID>
+              <Description>"Accurate Damage"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>4 Bytes</VariableType>
+              <Address>pcFinderPTR</Address>
+              <Offsets>
+                <Offset>504</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>1337027878</ID>
+              <Description>"MoveID"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>4 Bytes</VariableType>
+              <Address>pcFinderPTR</Address>
+              <Offsets>
+                <Offset>548</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>1337027879</ID>
+              <Description>"Transition*"</Description>
+              <DropDownList DisplayValueAsItem="1">32769:Standing
+32770:FC
+</DropDownList>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>4 Bytes</VariableType>
+              <Address>pcFinderPTR</Address>
+              <Offsets>
+                <Offset>5C+70</Offset>
+                <Offset>3E0</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>1337027880</ID>
+              <Description>"Animation*"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>4 Bytes</VariableType>
+              <Address>pcFinderPTR</Address>
+              <Offsets>
+                <Offset>18+70</Offset>
+                <Offset>3E0</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>1337027881</ID>
+              <Description>"HitReaction*"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>4 Bytes</VariableType>
+              <Address>pcFinderPTR</Address>
+              <Offsets>
+                <Offset>68+A8</Offset>
+                <Offset>3E0</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>1337027882</ID>
+              <Description>"Damage/Pushback*"</Description>
+              <Options moHideChildren="1"/>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>4 Bytes</VariableType>
+              <Address>pcFinderPTR</Address>
+              <Offsets>
+                <Offset>8</Offset>
+                <Offset>68+A8</Offset>
+                <Offset>3E0</Offset>
+              </Offsets>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>1337027883</ID>
+                  <Description>"Damage"</Description>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>2 Bytes</VariableType>
+                  <Address>pcFinderPTR</Address>
+                  <Offsets>
+                    <Offset>0</Offset>
+                    <Offset>68</Offset>
+                    <Offset>3B8</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>1337027884</ID>
+                  <Description>"Front Pushback"</Description>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>2 Bytes</VariableType>
+                  <Address>pcFinderPTR</Address>
+                  <Offsets>
+                    <Offset>0</Offset>
+                    <Offset>10</Offset>
+                    <Offset>68</Offset>
+                    <Offset>3B8</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>1337027885</ID>
+                  <Description>"Back Pushback"</Description>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>2 Bytes</VariableType>
+                  <Address>pcFinderPTR</Address>
+                  <Offsets>
+                    <Offset>8</Offset>
+                    <Offset>10</Offset>
+                    <Offset>68</Offset>
+                    <Offset>3B8</Offset>
+                  </Offsets>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>1337027886</ID>
+              <Description>"Total Animation Start Frame"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>4 Bytes</VariableType>
+              <Address>pcFinderPTR</Address>
+              <Offsets>
+                <Offset>74+A8</Offset>
+                <Offset>3E0</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>1337027887</ID>
+              <Description>"Total Animation End Frame"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>4 Bytes</VariableType>
+              <Address>pcFinderPTR</Address>
+              <Offsets>
+                <Offset>78+A8</Offset>
+                <Offset>3E0</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>1337027888</ID>
+              <Description>"Airborne Start"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <Color>008000</Color>
+              <VariableType>4 Bytes</VariableType>
+              <Address>pcFinderPTR</Address>
+              <Offsets>
+                <Offset>7C+A8</Offset>
+                <Offset>3E0</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>1337027889</ID>
+              <Description>"Airborne End"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <Color>000080</Color>
+              <VariableType>4 Bytes</VariableType>
+              <Address>pcFinderPTR</Address>
+              <Offsets>
+                <Offset>80+A8</Offset>
+                <Offset>3E0</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>1337027890</ID>
+              <Description>"Ground Fall"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>4 Bytes</VariableType>
+              <Address>pcFinderPTR</Address>
+              <Offsets>
+                <Offset>84+A8</Offset>
+                <Offset>3E0</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>1337027891</ID>
+              <Description>"Hit Level"</Description>
+              <DropDownList DisplayValueAsItem="1">1298:high
+535:mid
+2097687:mid
+271:low
+786703:low
+1055:s.low
+1799:mid!
+2560:throw (h)
+4195602:throw (h)
+799:s.mid
+2097423:low
+2097152:mid
+</DropDownList>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>4 Bytes</VariableType>
+              <Address>pcFinderPTR</Address>
+              <Offsets>
+                <Offset>34</Offset>
+                <Offset>3E0</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>1337027892</ID>
+              <Description>"First Active Frame"</Description>
+              <Options moRecursiveSetValue="1" moAlwaysHideChildren="1" moAllowManualCollapseAndExpand="1"/>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>4 Bytes</VariableType>
+              <Address>pcFinderPTR</Address>
+              <Offsets>
+                <Offset>B0+A8</Offset>
+                <Offset>3E0</Offset>
+              </Offsets>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>1337027893</ID>
+                  <Description>"First Active Frame 2"</Description>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>pcFinderPTR</Address>
+                  <Offsets>
+                    <Offset>B8+A8</Offset>
+                    <Offset>3B8</Offset>
+                  </Offsets>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>1337027894</ID>
+              <Description>"Last Active Frame"</Description>
+              <Options moRecursiveSetValue="1" moAlwaysHideChildren="1" moAllowManualCollapseAndExpand="1"/>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>4 Bytes</VariableType>
+              <Address>pcFinderPTR</Address>
+              <Offsets>
+                <Offset>B4+A8</Offset>
+                <Offset>3E0</Offset>
+              </Offsets>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>1337027895</ID>
+                  <Description>"Last Active Frame 2"</Description>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>pcFinderPTR</Address>
+                  <Offsets>
+                    <Offset>BC+A8</Offset>
+                    <Offset>3B8</Offset>
+                  </Offsets>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>1337027896</ID>
+              <Description>"Power Crush Bool"</Description>
+              <DropDownList DisplayValueAsItem="1">0:None
+1:Power Crush
+</DropDownList>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Byte</VariableType>
+              <Address>pcFinderPTR</Address>
+              <Offsets>
+                <Offset>9F8</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>1337027897</ID>
+              <Description>"Total Recovery Frames"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>4 Bytes</VariableType>
+              <Address>pcFinderPTR</Address>
+              <Offsets>
+                <Offset>5D4</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>1337027898</ID>
+              <Description>"Delay Frames"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <Color>000080</Color>
+              <VariableType>4 Bytes</VariableType>
+              <Address>pcFinderPTR</Address>
+              <Offsets>
+                <Offset>23F8</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>1337027899</ID>
+              <Description>"P2"</Description>
+              <Options moHideChildren="1"/>
+              <Color>804000</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>1337027900</ID>
+                  <Description>"Animation"</Description>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>pcFinderPTR</Address>
+                  <Offsets>
+                    <Offset>1BB88</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>1337027901</ID>
+                  <Description>"Hit Level"</Description>
+                  <Options moRecursiveSetValue="1" moAlwaysHideChildren="1"/>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>pcFinderPTR</Address>
+                  <Offsets>
+                    <Offset>24</Offset>
+                    <Offset>1BB88</Offset>
+                  </Offsets>
+                  <CheatEntries>
+                    <CheatEntry>
+                      <ID>1337027902</ID>
+                      <Description>"First Active Frame 2"</Description>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>pcFinderPTR</Address>
+                      <Offsets>
+                        <Offset>B8</Offset>
+                        <Offset>1B9B8</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                  </CheatEntries>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>1337027903</ID>
+                  <Description>"First Active Frame"</Description>
+                  <Options moRecursiveSetValue="1" moAlwaysHideChildren="1"/>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>pcFinderPTR</Address>
+                  <Offsets>
+                    <Offset>B0</Offset>
+                    <Offset>1BB88</Offset>
+                  </Offsets>
+                  <CheatEntries>
+                    <CheatEntry>
+                      <ID>1337027904</ID>
+                      <Description>"First Active Frame 2"</Description>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>pcFinderPTR</Address>
+                      <Offsets>
+                        <Offset>B8</Offset>
+                        <Offset>1BB88</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                  </CheatEntries>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>1337027905</ID>
+                  <Description>"Last Active Frame"</Description>
+                  <Options moRecursiveSetValue="1" moAlwaysHideChildren="1"/>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>pcFinderPTR</Address>
+                  <Offsets>
+                    <Offset>B4</Offset>
+                    <Offset>1BB88</Offset>
+                  </Offsets>
+                  <CheatEntries>
+                    <CheatEntry>
+                      <ID>1337027906</ID>
+                      <Description>"Last Active Frame 2"</Description>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>pcFinderPTR</Address>
+                      <Offsets>
+                        <Offset>BC</Offset>
+                        <Offset>1BB88</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                  </CheatEntries>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>1337027907</ID>
+                  <Description>"Power Crush Bool"</Description>
+                  <DropDownList DisplayValueAsItem="1">0:None
+1:Power Crush
+</DropDownList>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>Byte</VariableType>
+                  <Address>pcFinderPTR</Address>
+                  <Offsets>
+                    <Offset>1BA78</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>1337027908</ID>
+                  <Description>"Total Recovery Frames"</Description>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>pcFinderPTR</Address>
+                  <Offsets>
+                    <Offset>1BB80</Offset>
+                  </Offsets>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+      </CheatEntries>
+    </CheatEntry>
+  </CheatEntries>
+  <UserdefinedSymbols/>
+</CheatTable>

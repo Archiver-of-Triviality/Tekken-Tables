@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CheatTable CheatEngineTableVersion="46">
+  <CheatEntries>
+    <CheatEntry>
+      <ID>1337027823</ID>
+      <Description>"Move Display"</Description>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>{$lua}
+[ENABLE]
+if syntaxcheck then return end
+
+-- Create the form
+TextOverlayForm = createForm(false)
+local f = TextOverlayForm
+f.BorderStyle = 'bsNone' -- No border for the form
+f.Color = 0x000000 -- FF = transparent
+f.setLayeredAttributes(0xFF, 255, 3)
+f.FormStyle = 'fsSystemStayOnTop' -- Keep the form on top
+f.Left = 60
+f.Top = 270
+f.Width = 250 -- Increased width to accommodate longer text
+f.Height = 400 -- Height remains unchanged
+f.Caption = "" -- Remove caption
+
+-- Make the form draggable
+f.OnMouseDown = function()
+  f.dragNow()
+end
+
+-- Function to create and position a label
+local function createTextLabel(parent, top, caption, fontSize)
+  local label = createLabel(parent)
+  label.font.size = fontSize or 40 -- Font size for text
+  label.font.color = 0xFFFFFF -- White text
+  label.Font.Quality = 'fqNonAntialiased'
+  label.AutoSize = false
+  label.Caption = caption
+  label.Alignment = 'taLeftJustify'
+  label.Layout = 'llTop' -- Align text to the top
+  label.Left = 10
+  label.Width = parent.Width - 20 -- Adjusted to fit within the new width
+  label.Top = top
+  label.Height = 60 -- Height of the label
+  return label
+end
+
+-- Create the labels
+local animTimerLabel = createTextLabel(f, 10, "", 40)
+local totLabel = createTextLabel(f, 70, "tot: ", 40)
+local dmgLabel = createTextLabel(f, 140, "dmg: ", 40)
+local recoveryLabel = createTextLabel(f, 210, "imp: i", 40) -- Initialize with "imp: i"
+local recvLabel = createTextLabel(f, 280, "recv: r", 40) -- New label for the recv value
+
+-- Timer to update the text labels
+local t = createTimer(f)
+t.Interval = 1 -- Update every 1 millisecond
+local frameAtRecovery = nil -- Track the frame when enemyRecovering becomes non-zero
+local finalRecvValue = nil -- To store the final recv value
+
+t.OnTimer = function()
+  -- Capture the current frame (animTimer)
+  local animTimerValue = readInteger('3100908E4') or 0
+  local animTimerByte1 = (animTimerValue &gt;&gt; 24) &amp; 0xFF -- 4-byte big-endian
+  animTimerLabel.Caption = tostring(animTimerByte1)  -- Display anim timer as an integer
+
+  -- Check if enemyRecovering becomes non-zero (from address 31008F480)
+  local enemyRecoveringValue = readInteger('31008F480') or 0
+  if enemyRecoveringValue ~= 0 then
+    -- If enemyRecovering became non-zero, capture the frame number and subtract 1 for correction
+    if not frameAtRecovery then
+      frameAtRecovery = animTimerByte1 - 1  -- Subtract 1 to adjust the frame
+      recoveryLabel.Caption = "imp: i" .. tostring(frameAtRecovery)  -- Display the frame number with "imp: i"
+    end
+  else
+    -- Keep the "imp: i" text but remove the frame number when enemyRecovering is 0
+    if frameAtRecovery then
+      recoveryLabel.Caption = "imp: i"  -- Only show "imp: i" and remove the frame number
+      finalRecvValue = nil -- Reset the recv value when enemyRecovering is 0 again
+      frameAtRecovery = nil
+    end
+  end
+
+  -- Read the 4-byte value from new address for tot
+  local totValue = readInteger('3100909C0') or 0
+  local totValueByte1 = (totValue &gt;&gt; 8) &amp; 0xFF  -- 2-byte big-endian
+  totLabel.Caption = "tot: " .. tostring(totValueByte1)  -- Display new value as an integer
+
+  -- If no subtraction has occurred yet, set recv to the value of tot
+  if not frameAtRecovery then
+    recvLabel.Caption = "recv: r" .. tostring(totValueByte1)
+  else
+    -- Calculate the recv value (tot - frameAtRecovery) and display it
+    finalRecvValue = totValueByte1 - frameAtRecovery -- Subtract the frameAtRecovery from tot
+    recvLabel.Caption = "recv: r" .. tostring(finalRecvValue) -- Display the recv value with r
+  end
+
+  -- Read the 4-byte value for dmg
+  local dmgValue = readInteger('31009099C') or 0
+  local dmgValueByte1 = (dmgValue &gt;&gt; 24) &amp; 0xFF -- 4-byte big-endian
+  dmgLabel.Caption = "dmg: " .. tostring(dmgValueByte1)  -- Display anim timer as an integer
+end
+
+-- Start the form
+f.show()
+
+[DISABLE]
+if syntaxcheck then return end
+-- Clean up when the script is disabled
+if TextOverlayForm then
+  TextOverlayForm.destroy()
+  TextOverlayForm = nil
+end
+
+if t then
+  t.destroy()
+  t = nil
+end
+
+</AssemblerScript>
+    </CheatEntry>
+  </CheatEntries>
+  <UserdefinedSymbols/>
+</CheatTable>
