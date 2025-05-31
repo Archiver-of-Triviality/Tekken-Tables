@@ -235,8 +235,9 @@ Polaris-Win64-Shipping.exe+585D7C2: E8 59 25 F7 FB           - call Polaris-Win6
       <Options moHideChildren="1" moActivateChildrenAsWell="1"/>
       <VariableType>Auto Assembler Script</VariableType>
       <AssemblerScript>[ENABLE]
-
-aobscanmodule(hitboxScaler,Polaris-Win64-Shipping.exe,C7 86 9C 09 00 00 00 00 80 3F) // should be unique
+// C7 86 9C 09 00 00 00 00 80 3F old
+// C7 86 A0 09 00 00 00 00 80 3F 66 44 89 B6 A4 09 00 00 4C 89 B6 A8 09 00 00 new
+aobscanmodule(hitboxScaler,Polaris-Win64-Shipping.exe,C7 86 A0 09 00 00 00 00 80 3F) // should be unique
 alloc(newmem,$1000,hitboxScaler)
 
 label(code)
@@ -249,8 +250,9 @@ newmem:
 
 code:
   movss xmm1,[hitbox]
-  movss [rsi+0000099C],xmm1
-  //mov [rsi+0000099C],3F800000
+  movss [rsi+000009A0],xmm1
+  //mov [rsi+0000099C],3F800000 old
+  //mov [rsi+000009A0],3F800000 new
   jmp return
 
 hitbox:
@@ -265,7 +267,7 @@ registersymbol(hitboxScaler)
 [DISABLE]
 
 hitboxScaler:
-  db C7 86 9C 09 00 00 00 00 80 3F
+  db C7 86 A0 09 00 00 00 00 80 3F
 
 unregistersymbol(hitboxScaler)
 dealloc(newmem)
@@ -320,10 +322,11 @@ Polaris-Win64-Shipping.AK::WriteBytesCount::Clear+E89E: 83 BE D8 09 00 00 01    
 // 80 BB C0 09 00 00 00 new
 // 80 BB D8 09 00 00 00 74 09 C7 47 2C 06 00 00 00
 // 80 BB F8 09 00 00 00 74 09 C7 47 2C 06 00 00 00
+// 80 BB FC 09 00 00 00 74 09 C7 47 2C 06 00 00 00
 
 ///////// Animation info and frame data
 
-aobscanmodule(pcFinder,Polaris-Win64-Shipping.exe,80 BB F8 09 00 00 00) // should be unique
+aobscanmodule(pcFinder,Polaris-Win64-Shipping.exe,80 BB ?? 09 00 00 00 74 09 C7 47 2C 06 00 00 00) // should be unique
 alloc(newmem,$1000,pcFinder)
 
 label(code)
@@ -339,7 +342,7 @@ newmem:
   mov [pcFinderPTR],rbx // 92D offset = Power Crush Value
 
 code:
-  cmp byte ptr [rbx+000009F8],00
+  cmp byte ptr [rbx+0000095F],00 //rbx+9F8 is older.
   jmp return
 
 
@@ -356,7 +359,7 @@ registersymbol(pcFinder)
 [DISABLE]
 
 pcFinder:
-  db 80 BB F8 09 00 00 00
+  db 80 BB ?? 09 00 00 00 74 09 C7 47 2C 06 00 00 00
 
 unregistersymbol(pcFinder)
 dealloc(newmem)
@@ -511,9 +514,9 @@ t.OnTimer = function()
   local valueLAF = readInteger('[[pcFinderPTR]+3E0]+15C') or 0 -- Last Active Frame (LAF)
   local valueJS = readInteger('[[pcFinderPTR]+3E0]+124') or 0 -- js start
   local jsEnd = readInteger('[[pcFinderPTR]+3E0]+128') or 0 -- js end
-  local delay = readInteger('[pcFinderPTR]+23F8') or 0 -- Delay Value
+  local delay = readInteger('[pcFinderPTR]+2408') or 0 -- Delay Value
   local cs = readInteger('csPTR') or 0 -- Read the cs status
-  local pc = readBytes('[pcFinderPTR]+9F8', 1, false) or 0 -- Read the pc status as a byte
+  local pc = readBytes('[pcFinderPTR]+9FC', 1, false) or 0 -- Read the pc status as a byte
   local dmg = readInteger('[pcFinderPTR]+504') or 0
 
   -- Read the transition value from memory
@@ -1012,8 +1015,15 @@ Polaris-Win64-Shipping.exe+29D1E19: 48 33 CC                 - xor rcx,rsp
               <VariableType>Byte</VariableType>
               <Address>pcFinderPTR</Address>
               <Offsets>
-                <Offset>9F8</Offset>
+                <Offset>9FC</Offset>
               </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>1337027920</ID>
+              <Description>"No description"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>4 Bytes</VariableType>
+              <Address>1F7E4410A8C</Address>
             </CheatEntry>
             <CheatEntry>
               <ID>1337027897</ID>
@@ -1033,7 +1043,7 @@ Polaris-Win64-Shipping.exe+29D1E19: 48 33 CC                 - xor rcx,rsp
               <VariableType>4 Bytes</VariableType>
               <Address>pcFinderPTR</Address>
               <Offsets>
-                <Offset>23F8</Offset>
+                <Offset>2408</Offset>
               </Offsets>
             </CheatEntry>
             <CheatEntry>
