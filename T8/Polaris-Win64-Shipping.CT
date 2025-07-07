@@ -230,90 +230,6 @@ Polaris-Win64-Shipping.exe+585D7C2: E8 59 25 F7 FB           - call Polaris-Win6
 </AssemblerScript>
     </CheatEntry>
     <CheatEntry>
-      <ID>1337027919</ID>
-      <Description>"Hitbox Scaler"</Description>
-      <Options moHideChildren="1" moActivateChildrenAsWell="1"/>
-      <VariableType>Auto Assembler Script</VariableType>
-      <AssemblerScript>[ENABLE]
-// C7 86 9C 09 00 00 00 00 80 3F old
-// C7 86 A0 09 00 00 00 00 80 3F 66 44 89 B6 A4 09 00 00 4C 89 B6 A8 09 00 00 old
-// C7 86 A4 09 00 00 00 00 80 3F 66 44 89 B6 A8 09 00 00 4C 89 B6 AC 09 00 00
-aobscanmodule(hitboxScaler,Polaris-Win64-Shipping.exe,C7 86 A4 09 00 00 00 00 80 3F) // should be unique
-alloc(newmem,$1000,hitboxScaler)
-
-label(code)
-label(return)
-
-label(hitbox)
-registersymbol(hitbox)
-
-newmem:
-
-code:
-  movss xmm1,[hitbox]
-  movss [rsi+000009A4],xmm1
-  //movss [rsi+000009A0],xmm1
-  //mov [rsi+0000099C],3F800000 old
-  //mov [rsi+000009A0],3F800000 new
-  jmp return
-
-hitbox:
-dd (float)1.0
-
-hitboxScaler:
-  jmp newmem
-  nop 5
-return:
-registersymbol(hitboxScaler)
-
-[DISABLE]
-
-hitboxScaler:
-  db C7 86 A4 09 00 00 00 00 80 3F
-
-unregistersymbol(hitboxScaler)
-dealloc(newmem)
-unregistersymbol(hitbox)
-
-{
-// ORIGINAL CODE - INJECTION POINT: Polaris-Win64-Shipping.AK::WriteBytesCount::Clear+E854
-
-Polaris-Win64-Shipping.AK::WriteBytesCount::Clear+E81D: C7 86 90 09 00 00 64 00 00 00  - mov [rsi+00000990],00000064
-Polaris-Win64-Shipping.AK::WriteBytesCount::Clear+E827: 44 38 B6 94 09 00 00           - cmp [rsi+00000994],r14b
-Polaris-Win64-Shipping.AK::WriteBytesCount::Clear+E82E: 74 12                          - je Polaris-Win64-Shipping.AK::WriteBytesCount::Clear+E842
-Polaris-Win64-Shipping.AK::WriteBytesCount::Clear+E830: 48 8B CE                       - mov rcx,rsi
-Polaris-Win64-Shipping.AK::WriteBytesCount::Clear+E833: E8 28 7F 01 00                 - call "Polaris-Win64-Shipping.exe"+18F9A50
-Polaris-Win64-Shipping.AK::WriteBytesCount::Clear+E838: 48 8B C8                       - mov rcx,rax
-Polaris-Win64-Shipping.AK::WriteBytesCount::Clear+E83B: 33 D2                          - xor edx,edx
-Polaris-Win64-Shipping.AK::WriteBytesCount::Clear+E83D: E8 AE 73 17 FF                 - call Polaris-Win64-Shipping.AK::MemoryMgr::StartProfileThreadUsage
-Polaris-Win64-Shipping.AK::WriteBytesCount::Clear+E842: 66 44 89 B6 94 09 00 00        - mov [rsi+00000994],r14w
-Polaris-Win64-Shipping.AK::WriteBytesCount::Clear+E84A: C7 86 98 09 00 00 00 00 80 3F  - mov [rsi+00000998],3F800000
-// ---------- INJECTING HERE ----------
-Polaris-Win64-Shipping.AK::WriteBytesCount::Clear+E854: C7 86 9C 09 00 00 00 00 80 3F  - mov [rsi+0000099C],3F800000
-// ---------- DONE INJECTING  ----------
-Polaris-Win64-Shipping.AK::WriteBytesCount::Clear+E85E: 66 44 89 B6 A0 09 00 00        - mov [rsi+000009A0],r14w
-Polaris-Win64-Shipping.AK::WriteBytesCount::Clear+E866: 4C 89 B6 A4 09 00 00           - mov [rsi+000009A4],r14
-Polaris-Win64-Shipping.AK::WriteBytesCount::Clear+E86D: 4C 89 B6 AC 09 00 00           - mov [rsi+000009AC],r14
-Polaris-Win64-Shipping.AK::WriteBytesCount::Clear+E874: 44 88 B6 B8 09 00 00           - mov [rsi+000009B8],r14b
-Polaris-Win64-Shipping.AK::WriteBytesCount::Clear+E87B: 4C 89 B6 BC 09 00 00           - mov [rsi+000009BC],r14
-Polaris-Win64-Shipping.AK::WriteBytesCount::Clear+E882: 4C 89 B6 C4 09 00 00           - mov [rsi+000009C4],r14
-Polaris-Win64-Shipping.AK::WriteBytesCount::Clear+E889: 44 89 B6 CC 09 00 00           - mov [rsi+000009CC],r14d
-Polaris-Win64-Shipping.AK::WriteBytesCount::Clear+E890: 44 88 B6 D4 09 00 00           - mov [rsi+000009D4],r14b
-Polaris-Win64-Shipping.AK::WriteBytesCount::Clear+E897: 44 88 B6 38 19 00 00           - mov [rsi+00001938],r14b
-Polaris-Win64-Shipping.AK::WriteBytesCount::Clear+E89E: 83 BE D8 09 00 00 01           - cmp dword ptr [rsi+000009D8],01
-}
-</AssemblerScript>
-      <CheatEntries>
-        <CheatEntry>
-          <ID>1337027918</ID>
-          <Description>"Scale"</Description>
-          <ShowAsSigned>0</ShowAsSigned>
-          <VariableType>Float</VariableType>
-          <Address>hitbox</Address>
-        </CheatEntry>
-      </CheatEntries>
-    </CheatEntry>
-    <CheatEntry>
       <ID>1337027869</ID>
       <Description>"Info"</Description>
       <Options moAlwaysHideChildren="1" moActivateChildrenAsWell="1" moDeactivateChildrenAsWell="1"/>
@@ -327,11 +243,12 @@ Polaris-Win64-Shipping.AK::WriteBytesCount::Clear+E89E: 83 BE D8 09 00 00 01    
 // 80 BB F8 09 00 00 00 74 09 C7 47 2C 06 00 00 00 old
 // 80 BB FC 09 00 00 00 74 09 C7 47 2C 06 00 00 00 new
 // 80 BB 00 0A 00 00 00 74 09 C7 47 2C 06 00 00 00
+// 80 BB 70 0A 00 00 00 74 09 C7 47 2C 06 00 00 00
 //       XX XX
 
 ///////// Animation info and frame data
 
-aobscanmodule(pcFinder,Polaris-Win64-Shipping.exe,80 BB 00 0A 00 00 00 74 09) // should be unique
+aobscanmodule(pcFinder,Polaris-Win64-Shipping.exe,80 BB 70 0A 00 00 00 74 09) // should be unique
 alloc(newmem,$1000,pcFinder)
 
 label(code)
@@ -347,7 +264,7 @@ newmem:
   mov [pcFinderPTR],rbx // 92D offset = Power Crush Value
 
 code:
-  cmp byte ptr [rbx+00000A00],00
+  cmp byte ptr [rbx+00000A70],00
   jmp return
 
 
@@ -364,7 +281,7 @@ registersymbol(pcFinder)
 [DISABLE]
 
 pcFinder:
-  db 80 BB 00 0A 00 00 00
+  db 80 BB 70 0A 00 00 00
 
 unregistersymbol(pcFinder)
 dealloc(newmem)
@@ -519,9 +436,9 @@ t.OnTimer = function()
   local valueLAF = readInteger('[[pcFinderPTR]+3E0]+15C') or 0 -- Last Active Frame (LAF)
   local valueJS = readInteger('[[pcFinderPTR]+3E0]+124') or 0 -- js start
   local jsEnd = readInteger('[[pcFinderPTR]+3E0]+128') or 0 -- js end
-  local delay = readInteger('[pcFinderPTR]+2408') or 0 -- Delay Value
+  local delay = readInteger('[pcFinderPTR]+24C8') or 0 -- Delay Value
   local cs = readInteger('csPTR') or 0 -- Read the cs status
-  local pc = readBytes('[pcFinderPTR]+A00', 1, false) or 0 -- Read the pc status as a byte
+  local pc = readBytes('[pcFinderPTR]+A70', 1, false) or 0 -- Read the pc status as a byte
   local dmg = readInteger('[pcFinderPTR]+504') or 0
 
   -- Read the transition value from memory
