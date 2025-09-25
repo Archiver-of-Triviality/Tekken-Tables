@@ -13,7 +13,7 @@
           <VariableType>Auto Assembler Script</VariableType>
           <AssemblerScript>[ENABLE]
 
-aobscanregion(infTime,1000000000,FFFFFFFFFF,0F 38 F1 8C 18 FC 00 00 00 48 83 C4 28 E9 68)
+aobscanregion(infTime,10000000000,FFFFFFFFFFF,0F 38 F1 8C 18 FC 00 00 00 48 83 C4 28 E9 68)
 registersymbol(infTime)
 
 infTime:
@@ -62,7 +62,7 @@ unregistersymbol(infTime)
           <VariableType>Auto Assembler Script</VariableType>
           <AssemblerScript>[ENABLE]
 
-aobscanregion(infSelectTimer,1000000000,FFFFFFFFFF,0F 38 F1 4C 18 68 78 09 48 83 C4 28 E9 6A)
+aobscanregion(infSelectTimer,10000000000,FFFFFFFFFFF,0F 38 F1 4C 18 68 78 09 48 83 C4 28 E9 6A)
 registersymbol(infSelectTimer)
 
 infSelectTimer:
@@ -113,7 +113,7 @@ unregistersymbol(infSelectTimer)
       <VariableType>Auto Assembler Script</VariableType>
       <AssemblerScript>[ENABLE]
 
-aobscanregion(healthChanger,1000000000,FFFFFFFFFF,0F 38 F1 54 18 64 44 0F 38 F1 B4 18 10 03 00 00 44 0F 38 F1 84 18 18 03 00 00 48 83 C4 28 48 85 C9 78 05 E9 B3 F8 FF FF)
+aobscanregion(healthChanger,10000000000,FFFFFFFFFFF,0F 38 F1 54 18 64 44 0F 38 F1 B4 18 10 03 00 00 44 0F 38 F1 84 18 18 03 00 00 48 83 C4 28 48 85 C9 78 05 E9 B3 F8 FF FF)
 alloc(newmem,$1000)
 
 label(code)
@@ -173,3 +173,4 @@ dealloc(newmem)
   </CheatEntries>
   <UserdefinedSymbols/>
 </CheatTable>
+
