@@ -24,7 +24,7 @@ hideHud:
 unregistersymbol(hideHud)
 
 {
-// ORIGINAL CODE - INJECTION POINT: Polaris-Win64-Shipping.exe+2F3DBE0
+// ORIGINAL CODE - INJECTION POINT: Polaris-Win64-Shipping.exe+2F3DBE0 //test
 
 Polaris-Win64-Shipping.exe+2F3DBB2: 4C 8B C6              - mov r8,rsi
 Polaris-Win64-Shipping.exe+2F3DBB5: 88 4C 24 38           - mov [rsp+38],cl
@@ -1076,3 +1076,4 @@ Polaris-Win64-Shipping.exe+29D1E19: 48 33 CC                 - xor rcx,rsp
   </CheatEntries>
   <UserdefinedSymbols/>
 </CheatTable>
+
