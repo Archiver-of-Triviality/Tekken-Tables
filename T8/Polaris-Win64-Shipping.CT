@@ -384,240 +384,171 @@ Polaris-Win64-Shipping.exe+19495AB: 83 F8 1E              - cmp eax,1E
 [ENABLE]
 if syntaxcheck then return end
 
--- Create the form
+-- === Clean up any existing form ===
+if TextOverlayForm then TextOverlayForm.destroy() TextOverlayForm = nil end
+if t then t.destroy() t = nil end
+
+-- === Create the form ===
 TextOverlayForm = createForm(false)
 local f = TextOverlayForm
-f.BorderStyle = 'bsNone' -- No border for the form
-f.Color = 0x0000FF -- Black background
-f.setLayeredAttributes(0xFF, 255, 3)
-f.FormStyle = 'fsSystemStayOnTop' -- Keep the form on top
+f.BorderStyle = 'bsNone'
+f.Color = 0x101010 -- Dark background
+f.AlphaBlend = true
+f.AlphaBlendValue = 220 -- Semi-transparent
+f.FormStyle = 'fsSystemStayOnTop'
+f.ShowInTaskBar = 'stNever'
 f.Left = 60
 f.Top = 270
-f.Width = 400 -- Increased width to accommodate longer text
-f.Height = 500 -- Height remains unchanged
-f.Caption = "" -- Remove caption
+f.Width = 215
+f.Height = 275 -- Keep same form size
+f.Caption = ""
 
--- Make the form draggable
-f.OnMouseDown = function()
-  f.dragNow()
+-- === Make draggable ===
+local dragging, dx, dy = false, 0, 0
+f.OnMouseDown = function(_, _, x, y)
+  dragging, dx, dy = true, x, y
 end
+f.OnMouseMove = function(_, x, y)
+  if dragging then
+    f.Left = f.Left + (x - dx)
+    f.Top = f.Top + (y - dy)
+  end
+end
+f.OnMouseUp = function() dragging = false end
 
--- Function to create and position a label
-local function createTextLabel(parent, top, caption, fontSize)
+-- === Helper to create text labels ===
+local function createTextLabel(parent, top, caption)
   local label = createLabel(parent)
-  label.font.size = fontSize or 40 -- Font size for text
-  label.font.color = 0xFFFFFF -- White text
-  label.Font.Quality = 'fqNonAntialiased'
+  label.Font.Name = 'Segoe UI'
+  label.Font.Size = 16
+  label.Font.Color = 0xFFFFFF
+  label.Font.Quality = 'fqClearType'
   label.AutoSize = false
-  label.Caption = caption
   label.Alignment = 'taLeftJustify'
-  label.Layout = 'llTop' -- Align text to the top
+  label.Caption = caption
   label.Left = 10
-  label.Width = parent.Width - 20 -- Adjusted to fit within the new width
   label.Top = top
-  label.Height = 60 -- Height of the label
+  label.Width = parent.Width - 20
+  label.Height = 31 -- Slightly taller to prevent bottom clipping
   return label
 end
 
--- Function to create and position an outline label
-local function createOutlineLabel(parent, top, caption, fontSize)
-  local label = createLabel(parent)
-  label.font.size = fontSize or 40 -- Font size for text
-  label.font.color = 0x000000 -- Black color for the outline
-  label.Font.Quality = 'fqNonAntialiased'
-  label.AutoSize = false
-  label.Caption = caption
-  label.Alignment = 'taLeftJustify'
-  label.Layout = 'llTop' -- Align text to the top
-  label.Left = 8 -- Slightly offset for outline effect
-  label.Top = top + 2 -- Slightly offset for outline effect
-  label.Width = parent.Width - 20 -- Adjusted to fit within the new width
-  label.Height = 60 -- Height of the label
-  return label
-end
+-- === Create text labels ===
+local topValueLabel       = createTextLabel(f, 10, "")
+local recvLabel           = createTextLabel(f, 42, "recv: ")
+local totalRecoveryLabel  = createTextLabel(f, 74, "tot: ")
+local delayLabel          = createTextLabel(f, 106, "delay: ") -- Slightly more height prevents cutoff
+local jsLabel             = createTextLabel(f, 138, "js: ")
+local csLabel             = createTextLabel(f, 170, "cs: 0~")
+local pcLabel             = createTextLabel(f, 202, "pc: 0~")
+local dmgLabel            = createTextLabel(f, 234, "dmg: ") -- Full descender visibility
 
--- Create and position outline labels and text labels
-local topValueOutlineLabel = createOutlineLabel(f, 10, "", 40)
-local topValueLabel = createTextLabel(f, 10, "", 40)
-
-local recvOutlineLabel = createOutlineLabel(f, 70, "recv: ", 40)
-local recvLabel = createTextLabel(f, 70, "recv: ", 40)
-
-local totalRecoveryOutlineLabel = createOutlineLabel(f, 130, "tot: ", 40)
-local totalRecoveryLabel = createTextLabel(f, 130, "tot: ", 40)
-
-local delayOutlineLabel = createOutlineLabel(f, 190, "delay: ", 40)
-local delayLabel = createTextLabel(f, 190, "delay: ", 40)
-
-local jsOutlineLabel = createOutlineLabel(f, 250, "js: ", 40)
-local jsLabel = createTextLabel(f, 250, "js: ", 40)
-
--- New cs label
-local csOutlineLabel = createOutlineLabel(f, 310, "cs: 0~", 40)
-local csLabel = createTextLabel(f, 310, "cs: 0~", 40)
-
--- New pc label
-local pcOutlineLabel = createOutlineLabel(f, 370, "pc: 0~", 40)
-local pcLabel = createTextLabel(f, 370, "pc: 0~", 40)
-
-local dmgOutlineLabel = createOutlineLabel(f, 430, "dmg: ", 40)
-local dmgLabel = createTextLabel(f, 430, "dmg: ", 40)
-
--- Adjust height of labels slightly
-delayLabel.Height = 70
-delayOutlineLabel.Height = 70
-jsLabel.Height = 70
-jsOutlineLabel.Height = 70
-csLabel.Height = 70
-csOutlineLabel.Height = 70
-pcLabel.Height = 70
-pcOutlineLabel.Height = 70
-
--- Variables to track cs state and frames
+-- === State tracking variables ===
 local wasCrouching = false
 local crouchingFrameStart = 0
 local lastCrouchingFrame = 0
-local csDisplayDelay = 3000 -- 3 seconds delay before resetting cs values
+local csDisplayDelay = 3000
 
--- Variables to track pc state and frames
 local wasPC = false
 local pcFrameStart = 0
 local lastPCFrame = 0
 local prevTotalRecovery = 0
 
--- Timer to update the text labels
-local t = createTimer(f)
-t.Interval = 1 -- Update every 1 millisecond
+-- === Timer ===
+t = createTimer(f)
+t.Interval = 16 -- ~60Hz update
 t.OnTimer = function()
-  -- Read the values from memory with error handling
-  local topValue = readInteger('[pcFinderPTR]+390') or 0 -- Value to display at the top (Anim Timer)
-  local valuePCFinder = readInteger('[pcFinderPTR]+5D4') or 0 -- Total Recovery Frames
-  local valueLAF = readInteger('[[pcFinderPTR]+3E0]+15C') or 0 -- Last Active Frame (LAF)
-  local valueJS = readInteger('[[pcFinderPTR]+3E0]+124') or 0 -- js start
-  local jsEnd = readInteger('[[pcFinderPTR]+3E0]+128') or 0 -- js end
-  local delay = readInteger('[pcFinderPTR]+25D8') or 0 -- Delay Value
-  local cs = readInteger('csPTR') or 0 -- Read the cs status
-  local pc = readBytes('[pcFinderPTR]+A70', 1, false) or 0 -- Read the pc status as a byte
+  local topValue = readInteger('[pcFinderPTR]+390') or 0
+  local valuePCFinder = readInteger('[pcFinderPTR]+5D4') or 0
+  local valueLAF = readInteger('[[pcFinderPTR]+3E0]+15C') or 0
+  local valueJS = readInteger('[[pcFinderPTR]+3E0]+124') or 0
+  local jsEnd = readInteger('[[pcFinderPTR]+3E0]+128') or 0
+  local delay = readInteger('[pcFinderPTR]+25D8') or 0
+  local cs = readInteger('csPTR') or 0
+  local pc = readBytes('[pcFinderPTR]+A70', 1, false) or 0
   local dmg = readInteger('[pcFinderPTR]+504') or 0
+  local transition = readInteger('[[pcFinderPTR]+3E0]+5C+70') or 0
 
-  -- Read the transition value from memory
-  local transition = readInteger('[[pcFinderPTR]+3E0]+5C+70') or 0 -- Transition address
-
-  -- Calculate the Recovery value (recv) by subtracting LAF from Total Recovery Frames
   local result = valuePCFinder - valueLAF
+  if result &gt;= 0x80000000 then result = result - 0x100000000 end
 
-  -- Convert the result to signed 32-bit integer if necessary
-  local signedResult = result
-  if result &gt;= 0x80000000 then
-    signedResult = result - 0x100000000
-  end
-
-  -- Update the labels with the values
-  topValueLabel.Caption = "" .. topValue
-  topValueOutlineLabel.Caption = topValueLabel.Caption
-
-  -- Check if transition value is 32770 to append "FC"
+  topValueLabel.Caption = string.format("%d", topValue)
   if transition == 32770 then
-    recvLabel.Caption = "recv: " .. math.abs(signedResult) .. " FC"
+    recvLabel.Caption = string.format("recv: %d FC", math.abs(result))
   else
-    recvLabel.Caption = "recv: " .. math.abs(signedResult)
+    recvLabel.Caption = string.format("recv: %d", math.abs(result))
   end
+  totalRecoveryLabel.Caption = string.format("tot: %d", valuePCFinder)
 
-  recvOutlineLabel.Caption = recvLabel.Caption
-
-  totalRecoveryLabel.Caption = "tot: " .. valuePCFinder
-  totalRecoveryOutlineLabel.Caption = totalRecoveryLabel.Caption
-
-  -- Update the jsLabel to display the format "js start~js end"
-  jsLabel.Caption = "js: " .. valueJS .. "~" .. jsEnd
-  jsOutlineLabel.Caption = jsLabel.Caption
-
-  -- Update the delay label to show "delay: currentDelayValue-totalRecoveryValue + delayValue"
   local combinedValue = valuePCFinder + delay
-  delayLabel.Caption = "delay: " .. delay .. "-" .. combinedValue
-  delayOutlineLabel.Caption = delayLabel.Caption
+  delayLabel.Caption = string.format("delay: %d-%d", delay, combinedValue)
+  jsLabel.Caption = string.format("js: %d~%d", valueJS, jsEnd)
+  dmgLabel.Caption = string.format("dmg: %d", dmg)
 
-  dmgLabel.Caption = "dmg: " .. dmg
-  dmgOutlineLabel.Caption = dmgLabel.Caption
-
-  -- Detect when cs occurs and capture the start frame
+  -- === CS Tracking ===
   if cs == 1 then
     if not wasCrouching then
-      crouchingFrameStart = topValue -- Capture the anim timer value when cs starts
+      crouchingFrameStart = topValue
       wasCrouching = true
     end
-    lastCrouchingFrame = topValue -- Continuously update to capture the last frame where cs is 1
+    lastCrouchingFrame = topValue
   elseif wasCrouching then
     wasCrouching = false
-    -- Start a timer to reset the cs value after a delay
-    createTimer(f).OnTimer = function(tmr)
+    local resetTimer = createTimer(f, false)
+    resetTimer.Interval = csDisplayDelay
+    resetTimer.OnTimer = function()
       csLabel.Caption = "cs: 0~0"
-      csOutlineLabel.Caption = csLabel.Caption
-      tmr.destroy() -- Destroy the timer after use
+      resetTimer.destroy()
     end
-    createTimer(f).Interval = csDisplayDelay -- Set delay for cs to stay on screen
+    resetTimer.Enabled = true
   end
 
-  -- Display cs frame number as "start~last frame where cs was 1"
   if lastCrouchingFrame &gt; 0 then
-    csLabel.Caption = "cs: " .. crouchingFrameStart .. "~" .. lastCrouchingFrame
+    csLabel.Caption = string.format("cs: %d~%d", crouchingFrameStart, lastCrouchingFrame)
   else
     csLabel.Caption = "cs: 0~0"
   end
-  csOutlineLabel.Caption = csLabel.Caption
 
-  -- Check if the total recovery value has changed
+  -- === PC Tracking ===
   if valuePCFinder ~= prevTotalRecovery then
-    -- If changed, reset pc values
     pcFrameStart = 0
     lastPCFrame = 0
   end
 
-  -- Detect when pc occurs and capture the start frame
   if pc == 1 then
     if not wasPC then
-      pcFrameStart = topValue -- Capture the anim timer value when pc starts
+      pcFrameStart = topValue
       wasPC = true
     end
-    lastPCFrame = topValue -- Continuously update to capture the last frame where pc is 1
+    lastPCFrame = topValue
   elseif wasPC then
     wasPC = false
-    -- Start a timer to reset the pc value after a delay
-    createTimer(f).OnTimer = function(tmr)
+    local resetTimer = createTimer(f, false)
+    resetTimer.Interval = csDisplayDelay
+    resetTimer.OnTimer = function()
       pcLabel.Caption = "pc: 0~0"
-      pcOutlineLabel.Caption = pcLabel.Caption
-      tmr.destroy() -- Destroy the timer after use
+      resetTimer.destroy()
     end
-    createTimer(f).Interval = csDisplayDelay -- Set delay for pc to stay on screen
+    resetTimer.Enabled = true
   end
 
-  -- Display pc frame number as "start~last frame where pc was 1"
   if lastPCFrame &gt; 0 then
-    pcLabel.Caption = "pc: " .. pcFrameStart .. "~" .. lastPCFrame
+    pcLabel.Caption = string.format("pc: %d~%d", pcFrameStart, lastPCFrame)
   else
     pcLabel.Caption = "pc: 0~0"
   end
-  pcOutlineLabel.Caption = pcLabel.Caption
 
-  -- Store the current total recovery value for comparison in the next iteration
   prevTotalRecovery = valuePCFinder
 end
 
--- Start the form
+-- === Show form ===
 f.show()
 
 [DISABLE]
 if syntaxcheck then return end
--- Clean up when the script is disabled
-if TextOverlayForm then
-  TextOverlayForm.destroy()
-  TextOverlayForm = nil
-end
+if TextOverlayForm then TextOverlayForm.destroy() TextOverlayForm = nil end
+if t then t.destroy() t = nil end
 
-if t then
-  t.destroy()
-  t = nil
-end
 </AssemblerScript>
         </CheatEntry>
         <CheatEntry>
