@@ -456,7 +456,7 @@ local prevTotalRecovery = 0
 
 -- === Timer ===
 t = createTimer(f)
-t.Interval = 16 -- ~60Hz update
+t.Interval = 1
 t.OnTimer = function()
   local topValue = readInteger('[pcFinderPTR]+390') or 0
   local valuePCFinder = readInteger('[pcFinderPTR]+5D4') or 0
@@ -1076,4 +1076,5 @@ Polaris-Win64-Shipping.exe+29D1E19: 48 33 CC                 - xor rcx,rsp
   </CheatEntries>
   <UserdefinedSymbols/>
 </CheatTable>
+
 
