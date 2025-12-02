@@ -1,7 +1,7 @@
 # Tekken Tables
 
 T8 Table:
-<br>For version: 2.06.01
+<br>For version: 2.08.00
 <br>Just a table for finding info about frame data. It's not perfect but it does the job.
 
 T6 Arcade Table:
