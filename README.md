@@ -3,6 +3,7 @@
 T8 Table:
 <br>For version: 2.09.01
 <br>Just a table for finding info about frame data. It's not perfect but it does the job.
+<br>Frame History can be hidden via Insert key.
 
 T6 Arcade Table:
 <br>A Cheat Engine table for the newly released arcade version of Tekken 6 on rpcs3. It has three options:
