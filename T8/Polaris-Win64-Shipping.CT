@@ -289,7 +289,7 @@ end
 </AssemblerScript>
     </CheatEntry>
     <CheatEntry>
-      <ID>1337030300</ID>
+      <ID>1337030246</ID>
       <Description>"Info"</Description>
       <Options moAlwaysHideChildren="1" moActivateChildrenAsWell="1" moDeactivateChildrenAsWell="1"/>
       <VariableType>Auto Assembler Script</VariableType>
@@ -379,7 +379,7 @@ Polaris-Win64-Shipping.exe+19495AB: 83 F8 1E              - cmp eax,1E
 </AssemblerScript>
       <CheatEntries>
         <CheatEntry>
-          <ID>1337030301</ID>
+          <ID>1337030247</ID>
           <Description>"Display Move Data"</Description>
           <VariableType>Auto Assembler Script</VariableType>
           <AssemblerScript>{$lua}
@@ -402,7 +402,7 @@ f.ShowInTaskBar = 'stNever'
 f.Left = 60
 f.Top = 270
 f.Width = 215
-f.Height = 307
+f.Height = 275
 f.Caption = ""
 
 -- === Make draggable ===
@@ -444,11 +444,6 @@ local jsLabel             = createTextLabel(f, 138, "js: ")
 local csLabel             = createTextLabel(f, 170, "cs: 0~")
 local pcLabel             = createTextLabel(f, 202, "pc: 0~")
 local dmgLabel            = createTextLabel(f, 234, "dmg: ")
-local advMainLabel        = createTextLabel(f, 266, "---")
-advMainLabel.AutoSize = true
-local advUkemiLabel       = createTextLabel(f, 266, " (---)")
-advUkemiLabel.AutoSize = true
-advUkemiLabel.Left = advMainLabel.Left + advMainLabel.Width
 
 -- === State tracking variables ===
 local wasCrouching = false
@@ -465,7 +460,6 @@ local pcResetAt = 0
 
 local pcFinderPtrAddr = getAddressSafe('pcFinderPTR')
 local csPtrAddr = getAddressSafe('csPTR')
-local advPtrAddr = getAddressSafe('advPTR')
 
 local function readPtr(addr)
   if not addr or addr == 0 then return 0 end
@@ -481,54 +475,16 @@ local function setCaptionIfChanged(label, text)
   end
 end
 
-local function setLabelColorIfChanged(label, color)
-  if label.Font.Color ~= color then
-    label.Font.Color = color
-  end
-end
-
-local kDefaultTextColor = 0xFFFFFF
-local kAdvPositiveColor = 0xFFFF00 -- cyan
-local kAdvNegativeColor = 0x5050FF -- bright red
-
-local function getAdvColor(value)
-  if value &gt;= 1 then
-    return kAdvPositiveColor
-  elseif value &lt;= -1 then
-    return kAdvNegativeColor
-  end
-  return kDefaultTextColor
-end
-
-local function formatSigned(value)
-  if value &gt;= 0 then
-    return string.format("+%d", value)
-  end
-  return string.format("%d", value)
-end
-
-local function toSigned32(value, defaultValue)
-  if value == nil then
-    return defaultValue or 0
-  end
-  if value &gt;= 0x80000000 then
-    return value - 0x100000000
-  end
-  return value
-end
-
 -- === Timer ===
 t = createTimer(f)
 t.Interval = 1
 t.OnTimer = function()
   if not pcFinderPtrAddr then pcFinderPtrAddr = getAddressSafe('pcFinderPTR') end
   if not csPtrAddr then csPtrAddr = getAddressSafe('csPTR') end
-  if not advPtrAddr then advPtrAddr = getAddressSafe('advPTR') end
 
   local nowMs = getTickCount()
   local pcFinderBase = readPtr(pcFinderPtrAddr)
   local animInfoBase = readPtr(pcFinderBase + 0x3E0)
-  local advBase = readPtr(advPtrAddr)
 
   local animTimer = readInteger(pcFinderBase + 0x390) or 0
   local valuePCFinder = readInteger(pcFinderBase + 0x5DC) or 0
@@ -540,8 +496,6 @@ t.OnTimer = function()
   local pc = readBytes(pcFinderBase + 0xBEC, 1, false) or 0
   local dmg = readInteger(pcFinderBase + 0x504) or 0
   local transition = readInteger(animInfoBase + 0xCC) or 0
-  local frameAdvantage = toSigned32(readInteger(advBase + 0x44), 1000)
-  local ukemiFrameAdvantage = toSigned32(readInteger(advBase + 0x48), 1000)
 
   local result = valuePCFinder - valueLAF
   if result &gt;= 0x80000000 then result = result - 0x100000000 end
@@ -558,29 +512,6 @@ t.OnTimer = function()
   setCaptionIfChanged(delayLabel, string.format("delay: %d-%d", delay, combinedValue))
   setCaptionIfChanged(jsLabel, string.format("js: %d~%d", valueJS, jsEnd))
   setCaptionIfChanged(dmgLabel, string.format("dmg: %d", dmg))
-
-  if frameAdvantage == 1000 then
-    setCaptionIfChanged(advMainLabel, "---")
-    setCaptionIfChanged(advUkemiLabel, " (---)")
-    setLabelColorIfChanged(advMainLabel, kDefaultTextColor)
-    setLabelColorIfChanged(advUkemiLabel, kDefaultTextColor)
-  else
-    local advColor = getAdvColor(frameAdvantage)
-    setCaptionIfChanged(advMainLabel, formatSigned(frameAdvantage))
-    setLabelColorIfChanged(advMainLabel, advColor)
-
-    if ukemiFrameAdvantage == 1000 then
-      setCaptionIfChanged(advUkemiLabel, " (---)")
-    else
-      setCaptionIfChanged(advUkemiLabel, string.format(" (%s)", formatSigned(ukemiFrameAdvantage)))
-    end
-    setLabelColorIfChanged(advUkemiLabel, advColor)
-  end
-
-  local advUkemiLeft = advMainLabel.Left + advMainLabel.Width
-  if advUkemiLabel.Left ~= advUkemiLeft then
-    advUkemiLabel.Left = advUkemiLeft
-  end
 
   -- === CS Tracking ===
   if cs == 1 then
@@ -653,102 +584,7 @@ if t then t.destroy() t = nil end
 </AssemblerScript>
         </CheatEntry>
         <CheatEntry>
-          <ID>1337030302</ID>
-          <Description>"Adv Finder"</Description>
-          <Options moAlwaysHideChildren="1"/>
-          <VariableType>Auto Assembler Script</VariableType>
-          <AssemblerScript>[ENABLE]
-
-aobscanmodule(advFinder,Polaris-Win64-Shipping.exe,89 47 0C E8 69 4C F0 FF) // should be unique
-alloc(newmem,$1000,advFinder)
-
-label(code)
-label(return)
-
-label(advPTR)
-registersymbol(advPTR)
-
-newmem:
-  cmp [rdi+64],(int)1
-  jne code
-  mov [advPTR],rdi
-
-code:
-  mov [rdi+0C],eax
-  call 7FF73ED07450
-  jmp return
-
-advPTR:
-dd 0
-
-advFinder:
-  jmp newmem
-  nop 3
-return:
-registersymbol(advFinder)
-
-[DISABLE]
-
-advFinder:
-  db 89 47 0C E8 69 4C F0 FF
-
-unregistersymbol(advFinder)
-dealloc(newmem)
-unregistersymbol(advPTR)
-
-{
-// ORIGINAL CODE - INJECTION POINT: 7FF73EE027DF
-
-7FF73EE027AC: 48 8D 8B 18 1C 00 00  - lea rcx,[rbx+00001C18]
-7FF73EE027B3: 89 07                 - mov [rdi],eax
-7FF73EE027B5: E8 96 4C F0 FF        - call 7FF73ED07450
-7FF73EE027BA: 48 8D 8B 28 1C 00 00  - lea rcx,[rbx+00001C28]
-7FF73EE027C1: 89 47 04              - mov [rdi+04],eax
-7FF73EE027C4: E8 87 4C F0 FF        - call 7FF73ED07450
-7FF73EE027C9: 48 8D 8B E0 1B 00 00  - lea rcx,[rbx+00001BE0]
-7FF73EE027D0: 89 47 08              - mov [rdi+08],eax
-7FF73EE027D3: E8 78 4C F0 FF        - call 7FF73ED07450
-7FF73EE027D8: 48 8D 8B F0 1B 00 00  - lea rcx,[rbx+00001BF0]
-// ---------- INJECTING HERE ----------
-7FF73EE027DF: 89 47 0C              - mov [rdi+0C],eax
-// ---------- DONE INJECTING  ----------
-7FF73EE027E2: E8 69 4C F0 FF        - call 7FF73ED07450
-7FF73EE027E7: 89 47 10              - mov [rdi+10],eax
-7FF73EE027EA: 80 BB 5A 0F 00 00 00  - cmp byte ptr [rbx+00000F5A],00
-7FF73EE027F1: 75 0D                 - jne 7FF73EE02800
-7FF73EE027F3: 80 BB 5B 0F 00 00 00  - cmp byte ptr [rbx+00000F5B],00
-7FF73EE027FA: 75 04                 - jne 7FF73EE02800
-7FF73EE027FC: B0 01                 - mov al,01
-7FF73EE027FE: EB 02                 - jmp 7FF73EE02802
-7FF73EE02800: 32 C0                 - xor al,al
-7FF73EE02802: 88 47 34              - mov [rdi+34],al
-}
-</AssemblerScript>
-          <CheatEntries>
-            <CheatEntry>
-              <ID>1337030303</ID>
-              <Description>"frameAdvantage p1"</Description>
-              <ShowAsSigned>1</ShowAsSigned>
-              <VariableType>4 Bytes</VariableType>
-              <Address>advPTR</Address>
-              <Offsets>
-                <Offset>44</Offset>
-              </Offsets>
-            </CheatEntry>
-            <CheatEntry>
-              <ID>1337030304</ID>
-              <Description>"frameAdvantage ukemi (till tech roll) p1"</Description>
-              <ShowAsSigned>0</ShowAsSigned>
-              <VariableType>4 Bytes</VariableType>
-              <Address>advPTR</Address>
-              <Offsets>
-                <Offset>48</Offset>
-              </Offsets>
-            </CheatEntry>
-          </CheatEntries>
-        </CheatEntry>
-        <CheatEntry>
-          <ID>1337030305</ID>
+          <ID>1337030248</ID>
           <Description>"Crouch Status Finder"</Description>
           <Options moAlwaysHideChildren="1"/>
           <VariableType>Auto Assembler Script</VariableType>
@@ -798,7 +634,7 @@ unregistersymbol(csPTR)
 </AssemblerScript>
           <CheatEntries>
             <CheatEntry>
-              <ID>1337030306</ID>
+              <ID>1337030249</ID>
               <Description>"Edit Hitbox n Scaling"</Description>
               <Options moHideChildren="1"/>
               <VariableType>Auto Assembler Script</VariableType>
@@ -839,7 +675,7 @@ unregistersymbol(hitboxScaleNop)
 </AssemblerScript>
               <CheatEntries>
                 <CheatEntry>
-                  <ID>1337030307</ID>
+                  <ID>1337030250</ID>
                   <Description>"P1 Scale"</Description>
                   <ShowAsSigned>0</ShowAsSigned>
                   <VariableType>Float</VariableType>
@@ -849,7 +685,7 @@ unregistersymbol(hitboxScaleNop)
                   </Offsets>
                 </CheatEntry>
                 <CheatEntry>
-                  <ID>1337030308</ID>
+                  <ID>1337030251</ID>
                   <Description>"P2 Scale"</Description>
                   <ShowAsSigned>0</ShowAsSigned>
                   <VariableType>Float</VariableType>
@@ -859,7 +695,7 @@ unregistersymbol(hitboxScaleNop)
                   </Offsets>
                 </CheatEntry>
                 <CheatEntry>
-                  <ID>1337030309</ID>
+                  <ID>1337030252</ID>
                   <Description>"P1 Hitbox Scale"</Description>
                   <ShowAsSigned>0</ShowAsSigned>
                   <VariableType>Float</VariableType>
@@ -869,7 +705,7 @@ unregistersymbol(hitboxScaleNop)
                   </Offsets>
                 </CheatEntry>
                 <CheatEntry>
-                  <ID>1337030310</ID>
+                  <ID>1337030253</ID>
                   <Description>"P2 Hitbox Scale"</Description>
                   <ShowAsSigned>0</ShowAsSigned>
                   <VariableType>Float</VariableType>
@@ -881,7 +717,7 @@ unregistersymbol(hitboxScaleNop)
               </CheatEntries>
             </CheatEntry>
             <CheatEntry>
-              <ID>1337030311</ID>
+              <ID>1337030254</ID>
               <Description>"Animation +A8"</Description>
               <ShowAsSigned>0</ShowAsSigned>
               <VariableType>4 Bytes</VariableType>
@@ -891,7 +727,7 @@ unregistersymbol(hitboxScaleNop)
               </Offsets>
             </CheatEntry>
             <CheatEntry>
-              <ID>1337030312</ID>
+              <ID>1337030255</ID>
               <Description>"Anim Length"</Description>
               <ShowAsSigned>0</ShowAsSigned>
               <VariableType>4 Bytes</VariableType>
@@ -902,7 +738,7 @@ unregistersymbol(hitboxScaleNop)
               </Offsets>
             </CheatEntry>
             <CheatEntry>
-              <ID>1337030313</ID>
+              <ID>1337030256</ID>
               <Description>"Anim Timer"</Description>
               <ShowAsSigned>0</ShowAsSigned>
               <VariableType>4 Bytes</VariableType>
@@ -912,7 +748,7 @@ unregistersymbol(hitboxScaleNop)
               </Offsets>
             </CheatEntry>
             <CheatEntry>
-              <ID>1337030314</ID>
+              <ID>1337030257</ID>
               <Description>"MoveNum"</Description>
               <ShowAsSigned>0</ShowAsSigned>
               <VariableType>4 Bytes</VariableType>
@@ -923,7 +759,7 @@ unregistersymbol(hitboxScaleNop)
               </Offsets>
             </CheatEntry>
             <CheatEntry>
-              <ID>1337030315</ID>
+              <ID>1337030258</ID>
               <Description>"Crouch Status"</Description>
               <DropDownList DisplayValueAsItem="1">0:Standing
 1:Crouching
@@ -933,7 +769,7 @@ unregistersymbol(hitboxScaleNop)
               <Address>csPTR</Address>
             </CheatEntry>
             <CheatEntry>
-              <ID>1337030316</ID>
+              <ID>1337030259</ID>
               <Description>"Damage"</Description>
               <ShowAsSigned>0</ShowAsSigned>
               <VariableType>4 Bytes</VariableType>
@@ -945,7 +781,7 @@ unregistersymbol(hitboxScaleNop)
               </Offsets>
             </CheatEntry>
             <CheatEntry>
-              <ID>1337030317</ID>
+              <ID>1337030260</ID>
               <Description>"Accurate Damage"</Description>
               <ShowAsSigned>0</ShowAsSigned>
               <VariableType>4 Bytes</VariableType>
@@ -955,7 +791,7 @@ unregistersymbol(hitboxScaleNop)
               </Offsets>
             </CheatEntry>
             <CheatEntry>
-              <ID>1337030318</ID>
+              <ID>1337030261</ID>
               <Description>"MoveID"</Description>
               <ShowAsSigned>0</ShowAsSigned>
               <VariableType>4 Bytes</VariableType>
@@ -965,7 +801,7 @@ unregistersymbol(hitboxScaleNop)
               </Offsets>
             </CheatEntry>
             <CheatEntry>
-              <ID>1337030319</ID>
+              <ID>1337030262</ID>
               <Description>"Transition*"</Description>
               <DropDownList DisplayValueAsItem="1">32769:Standing
 32770:FC
@@ -979,7 +815,7 @@ unregistersymbol(hitboxScaleNop)
               </Offsets>
             </CheatEntry>
             <CheatEntry>
-              <ID>1337030320</ID>
+              <ID>1337030263</ID>
               <Description>"Animation*"</Description>
               <ShowAsSigned>0</ShowAsSigned>
               <VariableType>4 Bytes</VariableType>
@@ -990,7 +826,7 @@ unregistersymbol(hitboxScaleNop)
               </Offsets>
             </CheatEntry>
             <CheatEntry>
-              <ID>1337030321</ID>
+              <ID>1337030264</ID>
               <Description>"HitReaction*"</Description>
               <ShowAsSigned>0</ShowAsSigned>
               <VariableType>4 Bytes</VariableType>
@@ -1001,7 +837,7 @@ unregistersymbol(hitboxScaleNop)
               </Offsets>
             </CheatEntry>
             <CheatEntry>
-              <ID>1337030322</ID>
+              <ID>1337030265</ID>
               <Description>"Damage/Pushback*"</Description>
               <Options moHideChildren="1"/>
               <ShowAsSigned>0</ShowAsSigned>
@@ -1014,7 +850,7 @@ unregistersymbol(hitboxScaleNop)
               </Offsets>
               <CheatEntries>
                 <CheatEntry>
-                  <ID>1337030323</ID>
+                  <ID>1337030266</ID>
                   <Description>"Damage"</Description>
                   <ShowAsSigned>0</ShowAsSigned>
                   <VariableType>2 Bytes</VariableType>
@@ -1026,7 +862,7 @@ unregistersymbol(hitboxScaleNop)
                   </Offsets>
                 </CheatEntry>
                 <CheatEntry>
-                  <ID>1337030324</ID>
+                  <ID>1337030267</ID>
                   <Description>"Front Pushback"</Description>
                   <ShowAsSigned>0</ShowAsSigned>
                   <VariableType>2 Bytes</VariableType>
@@ -1039,7 +875,7 @@ unregistersymbol(hitboxScaleNop)
                   </Offsets>
                 </CheatEntry>
                 <CheatEntry>
-                  <ID>1337030325</ID>
+                  <ID>1337030268</ID>
                   <Description>"Back Pushback"</Description>
                   <ShowAsSigned>0</ShowAsSigned>
                   <VariableType>2 Bytes</VariableType>
@@ -1054,7 +890,7 @@ unregistersymbol(hitboxScaleNop)
               </CheatEntries>
             </CheatEntry>
             <CheatEntry>
-              <ID>1337030326</ID>
+              <ID>1337030269</ID>
               <Description>"Total Animation Start Frame"</Description>
               <ShowAsSigned>0</ShowAsSigned>
               <VariableType>4 Bytes</VariableType>
@@ -1065,7 +901,7 @@ unregistersymbol(hitboxScaleNop)
               </Offsets>
             </CheatEntry>
             <CheatEntry>
-              <ID>1337030327</ID>
+              <ID>1337030270</ID>
               <Description>"Total Animation End Frame"</Description>
               <ShowAsSigned>0</ShowAsSigned>
               <VariableType>4 Bytes</VariableType>
@@ -1076,7 +912,7 @@ unregistersymbol(hitboxScaleNop)
               </Offsets>
             </CheatEntry>
             <CheatEntry>
-              <ID>1337030328</ID>
+              <ID>1337030271</ID>
               <Description>"Airborne Start"</Description>
               <ShowAsSigned>0</ShowAsSigned>
               <Color>008000</Color>
@@ -1088,7 +924,7 @@ unregistersymbol(hitboxScaleNop)
               </Offsets>
             </CheatEntry>
             <CheatEntry>
-              <ID>1337030329</ID>
+              <ID>1337030272</ID>
               <Description>"Airborne End"</Description>
               <ShowAsSigned>0</ShowAsSigned>
               <Color>000080</Color>
@@ -1100,7 +936,7 @@ unregistersymbol(hitboxScaleNop)
               </Offsets>
             </CheatEntry>
             <CheatEntry>
-              <ID>1337030330</ID>
+              <ID>1337030273</ID>
               <Description>"Ground Fall"</Description>
               <ShowAsSigned>0</ShowAsSigned>
               <VariableType>4 Bytes</VariableType>
@@ -1111,7 +947,7 @@ unregistersymbol(hitboxScaleNop)
               </Offsets>
             </CheatEntry>
             <CheatEntry>
-              <ID>1337030331</ID>
+              <ID>1337030274</ID>
               <Description>"Hit Level"</Description>
               <DropDownList DisplayValueAsItem="1">1298:high
 535:mid
@@ -1135,7 +971,7 @@ unregistersymbol(hitboxScaleNop)
               </Offsets>
             </CheatEntry>
             <CheatEntry>
-              <ID>1337030332</ID>
+              <ID>1337030275</ID>
               <Description>"Hit Level Target"</Description>
               <DropDownList DisplayValueAsItem="1">1298:high
 535:mid
@@ -1160,7 +996,7 @@ unregistersymbol(hitboxScaleNop)
               </Offsets>
             </CheatEntry>
             <CheatEntry>
-              <ID>1337030333</ID>
+              <ID>1337030276</ID>
               <Description>"First Active Frame"</Description>
               <Options moRecursiveSetValue="1" moAlwaysHideChildren="1" moAllowManualCollapseAndExpand="1"/>
               <ShowAsSigned>0</ShowAsSigned>
@@ -1172,7 +1008,7 @@ unregistersymbol(hitboxScaleNop)
               </Offsets>
               <CheatEntries>
                 <CheatEntry>
-                  <ID>1337030334</ID>
+                  <ID>1337030277</ID>
                   <Description>"First Active Frame 2"</Description>
                   <ShowAsSigned>0</ShowAsSigned>
                   <VariableType>4 Bytes</VariableType>
@@ -1185,7 +1021,7 @@ unregistersymbol(hitboxScaleNop)
               </CheatEntries>
             </CheatEntry>
             <CheatEntry>
-              <ID>1337030335</ID>
+              <ID>1337030278</ID>
               <Description>"Last Active Frame"</Description>
               <Options moRecursiveSetValue="1" moAlwaysHideChildren="1" moAllowManualCollapseAndExpand="1"/>
               <ShowAsSigned>0</ShowAsSigned>
@@ -1197,7 +1033,7 @@ unregistersymbol(hitboxScaleNop)
               </Offsets>
               <CheatEntries>
                 <CheatEntry>
-                  <ID>1337030336</ID>
+                  <ID>1337030279</ID>
                   <Description>"Last Active Frame 2"</Description>
                   <ShowAsSigned>0</ShowAsSigned>
                   <VariableType>4 Bytes</VariableType>
@@ -1210,7 +1046,7 @@ unregistersymbol(hitboxScaleNop)
               </CheatEntries>
             </CheatEntry>
             <CheatEntry>
-              <ID>1337030337</ID>
+              <ID>1337030280</ID>
               <Description>"Power Crush Bool"</Description>
               <DropDownList DisplayValueAsItem="1">0:None
 1:Power Crush
@@ -1223,27 +1059,27 @@ unregistersymbol(hitboxScaleNop)
               </Offsets>
             </CheatEntry>
             <CheatEntry>
-              <ID>1337030338</ID>
+              <ID>1337030294</ID>
               <Description>"No description"</Description>
               <ShowAsSigned>0</ShowAsSigned>
               <VariableType>4 Bytes</VariableType>
               <Address>272B23D8C8C</Address>
             </CheatEntry>
             <CheatEntry>
-              <ID>1337030339</ID>
+              <ID>1337030295</ID>
               <Description>"No description"</Description>
               <ShowAsSigned>0</ShowAsSigned>
               <VariableType>4 Bytes</VariableType>
               <Address>2739EDEAAAC</Address>
             </CheatEntry>
             <CheatEntry>
-              <ID>1337030340</ID>
+              <ID>1337030281</ID>
               <Description>"No description"</Description>
               <VariableType>Byte</VariableType>
               <Address>18C44D40C7C</Address>
             </CheatEntry>
             <CheatEntry>
-              <ID>1337030341</ID>
+              <ID>1337030282</ID>
               <Description>"Total Recovery Frames"</Description>
               <ShowAsSigned>0</ShowAsSigned>
               <VariableType>4 Bytes</VariableType>
@@ -1253,7 +1089,7 @@ unregistersymbol(hitboxScaleNop)
               </Offsets>
             </CheatEntry>
             <CheatEntry>
-              <ID>1337030342</ID>
+              <ID>1337030283</ID>
               <Description>"Delay Frames"</Description>
               <ShowAsSigned>0</ShowAsSigned>
               <Color>000080</Color>
@@ -1264,14 +1100,14 @@ unregistersymbol(hitboxScaleNop)
               </Offsets>
             </CheatEntry>
             <CheatEntry>
-              <ID>1337030343</ID>
+              <ID>1337030284</ID>
               <Description>"P2"</Description>
               <Options moHideChildren="1"/>
               <Color>804000</Color>
               <GroupHeader>1</GroupHeader>
               <CheatEntries>
                 <CheatEntry>
-                  <ID>1337030344</ID>
+                  <ID>1337030285</ID>
                   <Description>"Animation"</Description>
                   <ShowAsSigned>0</ShowAsSigned>
                   <VariableType>4 Bytes</VariableType>
@@ -1281,7 +1117,7 @@ unregistersymbol(hitboxScaleNop)
                   </Offsets>
                 </CheatEntry>
                 <CheatEntry>
-                  <ID>1337030345</ID>
+                  <ID>1337030286</ID>
                   <Description>"Hit Level"</Description>
                   <Options moRecursiveSetValue="1" moAlwaysHideChildren="1"/>
                   <ShowAsSigned>0</ShowAsSigned>
@@ -1293,7 +1129,7 @@ unregistersymbol(hitboxScaleNop)
                   </Offsets>
                   <CheatEntries>
                     <CheatEntry>
-                      <ID>1337030346</ID>
+                      <ID>1337030287</ID>
                       <Description>"First Active Frame 2"</Description>
                       <ShowAsSigned>0</ShowAsSigned>
                       <VariableType>4 Bytes</VariableType>
@@ -1306,7 +1142,7 @@ unregistersymbol(hitboxScaleNop)
                   </CheatEntries>
                 </CheatEntry>
                 <CheatEntry>
-                  <ID>1337030347</ID>
+                  <ID>1337030288</ID>
                   <Description>"First Active Frame"</Description>
                   <Options moRecursiveSetValue="1" moAlwaysHideChildren="1"/>
                   <ShowAsSigned>0</ShowAsSigned>
@@ -1318,7 +1154,7 @@ unregistersymbol(hitboxScaleNop)
                   </Offsets>
                   <CheatEntries>
                     <CheatEntry>
-                      <ID>1337030348</ID>
+                      <ID>1337030289</ID>
                       <Description>"First Active Frame 2"</Description>
                       <ShowAsSigned>0</ShowAsSigned>
                       <VariableType>4 Bytes</VariableType>
@@ -1331,7 +1167,7 @@ unregistersymbol(hitboxScaleNop)
                   </CheatEntries>
                 </CheatEntry>
                 <CheatEntry>
-                  <ID>1337030349</ID>
+                  <ID>1337030290</ID>
                   <Description>"Last Active Frame"</Description>
                   <Options moRecursiveSetValue="1" moAlwaysHideChildren="1"/>
                   <ShowAsSigned>0</ShowAsSigned>
@@ -1343,7 +1179,7 @@ unregistersymbol(hitboxScaleNop)
                   </Offsets>
                   <CheatEntries>
                     <CheatEntry>
-                      <ID>1337030350</ID>
+                      <ID>1337030291</ID>
                       <Description>"Last Active Frame 2"</Description>
                       <ShowAsSigned>0</ShowAsSigned>
                       <VariableType>4 Bytes</VariableType>
@@ -1356,7 +1192,7 @@ unregistersymbol(hitboxScaleNop)
                   </CheatEntries>
                 </CheatEntry>
                 <CheatEntry>
-                  <ID>1337030351</ID>
+                  <ID>1337030292</ID>
                   <Description>"Power Crush Bool"</Description>
                   <DropDownList DisplayValueAsItem="1">0:None
 1:Power Crush
@@ -1369,7 +1205,7 @@ unregistersymbol(hitboxScaleNop)
                   </Offsets>
                 </CheatEntry>
                 <CheatEntry>
-                  <ID>1337030352</ID>
+                  <ID>1337030293</ID>
                   <Description>"Total Recovery Frames"</Description>
                   <ShowAsSigned>0</ShowAsSigned>
                   <VariableType>4 Bytes</VariableType>
