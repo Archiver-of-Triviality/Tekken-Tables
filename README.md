@@ -1,7 +1,7 @@
 # Tekken Tables
 
 T8 Table:
-<br>For version: 3.00.00
+<br>For version: 3.00.01
 <br>Just a table for finding info about frame data. It's not perfect but it does the job.
 <br>Frame History can be hidden via Insert key.
 
