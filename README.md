@@ -11,5 +11,4 @@ T6 Arcade Table:
 <br>Infinite Health for All
 
 T5DR Table:
-<br>MovePopulator uses sdtekken.com info to populate wavu wiki style entries.
 <br>Display attack data while in game using rpcs3. Janky but works kind of.
